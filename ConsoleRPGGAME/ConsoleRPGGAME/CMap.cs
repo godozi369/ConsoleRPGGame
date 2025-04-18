@@ -34,6 +34,7 @@ namespace Game.Map
                 }
             }
         }
+        public void Map
         // 맵을 화면에 출력하는 메서드
         public void Render(int playerX, int playerY)
         {

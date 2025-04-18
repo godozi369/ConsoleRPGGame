@@ -3,7 +3,7 @@
 namespace Game.Item
 {
     public enum ItemCategory { Weapon, Armor, Potion }
-    internal class CItem
+    public class CItem
     {
         public string name { get; set; }
         public int abil { get; set; }

@@ -17,7 +17,7 @@ namespace Program
 
             SceneManager sceneManager = new SceneManager();
 
-            // 씬 추가 
+            // 씬 추가  ( 삭제 ) 
             sceneManager.AddScene("MainMenu", new MainMenuScene());
             sceneManager.AddScene("Game", new GameScene());
             sceneManager.AddScene("character", new CharacterScene(player));

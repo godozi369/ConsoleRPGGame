@@ -25,8 +25,9 @@ namespace Game.GameManager
             // 스테이지 3 
             CMap map1_3 = new CMap();
             map1_3.Initialize(11);
-
         }
+        
+
 
         public void playerMove()
         {

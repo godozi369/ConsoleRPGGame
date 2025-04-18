@@ -10,8 +10,8 @@ namespace Game.Player
         public int Gold { get; set; }
         public int Atk { get; set; }
 
-        private CInven EquipItem { get; set; }
-        private CInven Inventory { get; set; }
+        public CItem EquipItem { get; set; }
+        public CInven Inventory { get; set; }
 
         public CPlayer(string name, int gold, int atk, CInven inven)
         {
@@ -26,8 +26,8 @@ namespace Game.Player
 
             if (EquipItem != null)
             {
-                Console.WriteLine($"\n이름: {Name}, 공격력: {Atk}+{EquipItem.Abil}, 골드: {Gold}");
-                Console.WriteLine($"장착중:{EquipItem.Name} (공격력 + {Abil})");
+                Console.WriteLine($"\n이름: {Name}, 공격력: {Atk}+{EquipItem.abil}, 골드: {Gold}");
+                Console.WriteLine($"장착중:{EquipItem.name} (공격력 + {EquipItem.abil})");
             }
             else
             {
