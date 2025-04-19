@@ -6,9 +6,9 @@ namespace Game.Map
     {
         public enum TileType
         {
-            Empty, // 빈공간
-            Wall, // 벽
-            portal // 포탈 
+            Empty, 
+            Wall, 
+            portal  
         }
         const char CIRCLE = '\u25cf'; // 유니코드 문자로 출력하기 위한 상수 
         public TileType[,] _tile; // 2차원 배열로 맵의 각 타일 저장
@@ -18,9 +18,9 @@ namespace Game.Map
         {
             _tile = new TileType[size, size]; // 맵의 크기 size x size 만큼 2차원 배열 생성
             _size = size; // 맵 크기 설정
-            for (int y = 0; y < _size; y++)  // 행
+            for (int y = 0; y < _size; y++)  
             {
-                for (int x = 0; x < _size; x++) // 열
+                for (int x = 0; x < _size; x++) 
                 {
                     // 맵의 테두리 벽으로 만들기
                     if (x == 0 || x == _size - 1 || y == 0 || y == _size - 1)
@@ -34,15 +34,15 @@ namespace Game.Map
                 }
             }
         }
-        public void Map
+        
         // 맵을 화면에 출력하는 메서드
         public void Render(int playerX, int playerY)
-        {
-            ConsoleColor prevColor = Console.ForegroundColor; // 현재 콘솔의 글자색을 저장.
-
-            for (int y = 0; y < _size; y++) // 행 순회
+        {   
+            ConsoleColor prevColor = Console.ForegroundColor; 
+            for (int y = 0; y < _size; y++) 
             {
-                for (int x = 0; x < _size; x++) // 열 순회
+                Console.SetCursorPosition(_size*2, y);
+                for (int x = 0; x < _size; x++) 
                 {
                     if (x == playerX && y == playerY)
                         Console.ForegroundColor = ConsoleColor.Red; // 캐릭터 위치 색
@@ -73,7 +73,7 @@ namespace Game.Map
             }
         }
 
-        // 포탈 좌표 설정 기능
+        // 포탈 좌표 설정 
         public void SetPortal(int x, int y)
         {
             if (_tile[y, x] == TileType.Empty)

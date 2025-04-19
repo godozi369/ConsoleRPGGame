@@ -12,19 +12,21 @@ namespace Game.GameManager
         {
             // 스테이지 1 
             CMap map1_1 = new CMap();
-            map1_1.Initialize(9);
-            map1_1.SetPortal(7, 7);
+            map1_1.Initialize(20);
+            map1_1.SetPortal(18, 18);
             _stages.Add(map1_1);
 
             // 스테이지 2
             CMap map1_2 = new CMap();
-            map1_2.Initialize(10);
-            map1_2.SetPortal(8, 8);
+            map1_2.Initialize(20);
+            map1_2.SetPortal(18, 18);
             _stages.Add(map1_2);
 
             // 스테이지 3 
             CMap map1_3 = new CMap();
-            map1_3.Initialize(11);
+            map1_3.Initialize(20);
+            map1_3.SetPortal(18, 18);
+            _stages.Add(map1_3);
         }
         
 
