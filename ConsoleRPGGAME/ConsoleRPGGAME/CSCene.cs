@@ -1,6 +1,6 @@
 ﻿using Game.Item;
 using Game.Player;
-using Game.Shop;
+using Game.NPC;
 
 namespace Game.Scene
 {
@@ -87,92 +87,6 @@ namespace Game.Scene
         public override void Unload() => Console.WriteLine("메인 메뉴 언로드");
     }
     #endregion
-    #region 상점씬
-    public class ShopScene : Scene
-    {
-        private CPlayer player;
-        private CShop shop;
-
-        public ShopScene(CPlayer player)
-        {
-            this.player = player;
-            this.shop = new CShop();
-        }
-
-        public override string Name => "Shop";
-
-        public override void Load(SceneManager manager)
-        {
-            Console.WriteLine("\n[상점]");
-            Console.WriteLine("원하는 카테고리를 고르세요:");
-            Console.WriteLine("1. 무기 | 2. 방어구 | 3. 포션 | 0. 메인메뉴");
-
-            var input = Console.ReadLine();
-            ItemCategory category;
-
-            switch (input)
-            {
-                case "1":
-                    category = ItemCategory.Weapon;
-                    break;
-                case "2":
-                    category = ItemCategory.Armor;
-                    break;
-                case "3":
-                    category = ItemCategory.Potion;
-                    break;
-                case "0":
-                    manager.ChangeScene("main");
-                    return;
-                default:
-                    Console.WriteLine("잘못된 입력입니다.");
-                    manager.ChangeScene("main");
-                    return;
-            }
-
-            // 카테고리별 아이템 출력
-            var availableItems = shop.GetItemsByCategory(category);
-
-            if (availableItems.Count == 0)
-            {
-                Console.WriteLine("해당 카테고리에 아이템이 없습니다.");
-                manager.ChangeScene("main");
-                return;
-            }
-
-            for (int i = 0; i < availableItems.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. ");
-                availableItems[i].ShowInfo();
-            }
-
-            Console.Write("구매할 아이템 번호를 입력하세요 (0: 취소): ");
-            if (int.TryParse(Console.ReadLine(), out int itemIndex) && itemIndex > 0 && itemIndex <= availableItems.Count)
-            {
-                var selectedItem = availableItems[itemIndex - 1];
-
-                if (player.Gold >= selectedItem.price)
-                {
-                    player.Gold -= selectedItem.price;
-                    player.Inventory.AddItem(selectedItem);
-                    Console.WriteLine($"'{selectedItem.name}'을(를) 구매했습니다!");
-                }
-                else
-                {
-                    Console.WriteLine("골드가 부족합니다!");
-                }
-            }
-            else
-            {
-                Console.WriteLine("구매를 취소했습니다.");
-            }
-
-            manager.ChangeScene("main");
-        }
-
-        public override void Unload() { }
-    }
-    #endregion
     #region 인벤토리씬
     public class InventoryScene : Scene
     {
@@ -193,15 +107,15 @@ namespace Game.Scene
             Console.WriteLine("아이템 번호 입력시 장착 / 아무 키나 누르면 메인 메뉴로");
             if (int.TryParse(Console.ReadLine(), out int num))
             {
-                var item = player.Inventory.GetItem(num);
-                if (item != null)
-                {
-                    player.EquipItem = item;
-                    Console.WriteLine($"{item.name} 장착 완료!");
-                }
+                //var item = player.Inventory.GetItem(num);
+                //if (item != null)
+                //{
+                //    player.EquipItem = item;
+                //    Console.WriteLine($"{item.name} 장착 완료!");
+                //}
             }
 
-            manager.ChangeScene("main");
+            manager.ChangeScene("Main");
         }
 
         public override void Unload() { }

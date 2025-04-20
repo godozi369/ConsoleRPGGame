@@ -1,25 +1,28 @@
-﻿using Game.Inven;
-using Game.Shop;
+﻿using Game.Inventory;
+using Game.NPC;
 using Game.Item;
 
 namespace Game.Player
 {
     public class CPlayer
     {
-        public string Name { get; set; }
-        public int Gold { get; set; }
-        public int Atk { get; set; }
+        public string Name { get; }
+        public int Hp { get; }
+        public int Atk { get; }
+        public int Gold { get; }
 
         public CItem EquipItem { get; set; }
-        public CInven Inventory { get; set; }
+        public CInventory Inventory { get; set; }
 
-        public CPlayer(string name, int gold, int atk, CInven inven)
+        public CPlayer(string name, int hp, int atk, int gold, CInventory inven)
         {
             Name = name;
-            Gold = gold;
+            Hp = hp;
             Atk = atk;
-            Inventory = new CInven();
+            Gold = gold;
+            Inventory = new CInventory();
         }
+        
 
         public void ShowStatus()
         {
@@ -35,6 +38,9 @@ namespace Game.Player
                 Console.WriteLine("장착중인 아이템이 없습니다.\n");
             }
         }
+        public void GetItem()
+        {
 
+        }
     }
 }
