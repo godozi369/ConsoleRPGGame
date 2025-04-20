@@ -1,20 +1,14 @@
 ﻿using Game.Item;
+using Game.Player;
 
 namespace Game.Inventory
 {
     public class CInventory
     {
+        
         private List<CItem> InvenList;
-        // 장착중인 무기 
-        private CItem EquipWeapon;
-        // 장착중인 방어구 
-        private CItem EquipArmor;
-
         public CInventory()
         {
-            EquipWeapon = new CItem();
-            EquipArmor = new CItem();
-
             InvenList = new List<CItem>();
         }
 
@@ -39,7 +33,12 @@ namespace Game.Inventory
             InvenList.Add(item);
             Console.WriteLine($"[인벤토리] '{item.name}'이(가) 추가됨!");
         }
-
-
+        public void SellItem(CItem item, CPlayer player)
+        {
+            InvenList.Remove(item);
+            Console.WriteLine($"[인벤토리] {item.name}을(를) {item.price/2}골드에 판매하였습니다");
+            player.Gold += item.price;
+            Console.WriteLine($"[소지금] : {player.Gold} + {item.price/2} = {player.Gold + item.price/2}");
+        }
     }
 }

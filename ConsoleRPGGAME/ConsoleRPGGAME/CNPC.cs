@@ -77,7 +77,9 @@ namespace Game.NPC
             }
 
             Console.WriteLine("\n0. 이전으로 돌아가기");
+            Console.WriteLine($"소지골드 : {player.Gold}");
             Console.Write($"구매할 아이템 번호를 입력하세요 : ");
+            
 
             if (int.TryParse(Console.ReadLine(), out int choice))
             {
