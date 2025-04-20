@@ -107,12 +107,12 @@ namespace Game.Scene
             Console.WriteLine("아이템 번호 입력시 장착 / 아무 키나 누르면 메인 메뉴로");
             if (int.TryParse(Console.ReadLine(), out int num))
             {
-                //var item = player.Inventory.GetItem(num);
-                //if (item != null)
-                //{
-                //    player.EquipItem = item;
-                //    Console.WriteLine($"{item.name} 장착 완료!");
-                //}
+                var item = player.Inventory.GetItem(num);
+                if (item != null)
+                {
+                    player.EquipItem = item;
+                    Console.WriteLine($"{item.name} 장착 완료!");
+                }
             }
 
             manager.ChangeScene("Main");

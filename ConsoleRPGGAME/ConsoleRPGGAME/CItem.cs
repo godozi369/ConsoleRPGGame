@@ -43,7 +43,7 @@ namespace Game.Item
         }
     }
 
-    class Weapon : CItem
+    public class Weapon : CItem
     {
         public Weapon(string type, string name, string info, int abil, int price) : base(type, name, abil, price, info, ItemCategory.Weapon) { }
 
@@ -53,7 +53,7 @@ namespace Game.Item
         }
     }
 
-    class Armor : CItem
+    public class Armor : CItem
     {
         public Armor(string type, string name, string info, int abil, int price) : base(type, name, abil, price, info, ItemCategory.Armor) { }
 
