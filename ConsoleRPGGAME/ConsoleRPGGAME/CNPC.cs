@@ -1,6 +1,6 @@
 ﻿using Game.Item;
 using Game.Player;
-
+using Game.Inventory;
 
 namespace Game.NPC
 {
@@ -18,10 +18,10 @@ namespace Game.NPC
         public abstract void Interact(CPlayer player);              
     }
     // 1. 행상인npc
-    public class ShopNPC : CNPC
+    public class NPC1 : CNPC
     {
         private CShop shop;
-        public ShopNPC(string name, CShop shop) : base(name) { this.shop = shop; } 
+        public NPC1(string name, CShop shop) : base(name) { this.shop = shop; } 
         public override void Interact(CPlayer player)
         {
             Console.Clear();
@@ -124,6 +124,7 @@ namespace Game.NPC
                 Console.WriteLine("\t1. 무기\n");
                 Console.WriteLine("\t2. 방어구\n");
                 Console.WriteLine("\t3. 포션\n");
+                Console.WriteLine("\t4. 판매\n");
                 Console.Write("카테고리 번호를 입력하세요 : ");
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
@@ -133,6 +134,7 @@ namespace Game.NPC
                     case ConsoleKey.D1: ShowCategory(ItemCategory.Weapon, player); return;
                     case ConsoleKey.D2: ShowCategory(ItemCategory.Armor, player); return;
                     case ConsoleKey.D3: ShowCategory(ItemCategory.Potion, player); return;
+                    case ConsoleKey.D4: 
                     default: Console.WriteLine("뭐하는짓이야!"); break;
                 }           
 
