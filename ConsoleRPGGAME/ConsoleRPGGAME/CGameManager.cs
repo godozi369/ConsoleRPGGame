@@ -2,7 +2,7 @@
 
 namespace Game.GameManager
 {
-    class CGameManager
+    public class CGameManager
     {
         List<CMap> _stages = new List<CMap>();
         int _currentStage = 0;
@@ -28,14 +28,15 @@ namespace Game.GameManager
             map1_3.SetPortal(18, 18);
             _stages.Add(map1_3);
         }
-        
+        public void RenderMap()
+        {
+            _stages[_currentStage].Render(_playerX, _playerY);
+        }
 
 
-        public void playerMove()
+        public void playerMove(ConsoleKey key)
         {
             ConsoleKeyInfo cki;
-
-
             while (true)
             {
                 Console.Clear();

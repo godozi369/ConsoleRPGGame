@@ -19,29 +19,26 @@ namespace Program
 
             CInventory Inven = new CInventory();
             CPlayer player = new CPlayer("까비", 300, 15, 0, 150, Inven);
-            
+
+            CGameManager gameManager = new CGameManager();
+            gameManager.Initialize();   // 맵 생성
+
             CShop shop = new CShop();
             CNPC npc = new NPC1("지나가는 행상인", shop);
             // npc.Interact(player); // npc상호작용 test
 
             Inven.ShowInventory();
-
-            SceneManager sceneManager = new SceneManager();
-            
+          
             // 씬 추가  ( 삭제 ) 
-            sceneManager.Register(SceneType.MainMenu, new MainMenuScene());
-            sceneManager.Register(SceneType.Map, new GameScene());
+            SceneManager sceneManager = new SceneManager();
+            sceneManager.Register(SceneType.Action, new GameScene(gameManager, player));
             sceneManager.Register(SceneType.PlayerStatus, new CharacterScene(player));
             sceneManager.Register(SceneType.Inventory, new InventoryScene(player));
             
             
             // 기본 씬 설정
-            sceneManager.ChangeScene(SceneType.MainMenu);
+            sceneManager.ChangeScene(SceneType.Action);
 
-
-            CGameManager game = new CGameManager();
-            game.Initialize();
-            game.playerMove();
 
 
         }
