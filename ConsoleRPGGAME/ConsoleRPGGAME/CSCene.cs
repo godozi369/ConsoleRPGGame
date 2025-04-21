@@ -30,19 +30,18 @@ namespace Game.Scene
             Console.WriteLine("[W] 인벤토리");
             Console.WriteLine("[Back Space] 종료");
 
-            if (Console.KeyAvailable)
+           
+            var key = Console.ReadKey(true).Key;
+            switch (key)
             {
-                var key = Console.ReadKey(true).Key;
-                switch (key)
-                {
-                    case ConsoleKey.Q: manager.ChangeScene(SceneType.PlayerStatus); break;
-                    case ConsoleKey.W: manager.ChangeScene(SceneType.Inventory); break;
-                    case ConsoleKey.Backspace: 
-                        Console.WriteLine("게임 종료"); 
-                        Environment.Exit(0);
-                        break;
-                }
+                case ConsoleKey.Q: manager.ChangeScene(SceneType.PlayerStatus); break;
+                case ConsoleKey.W: manager.ChangeScene(SceneType.Inventory); break;
+                case ConsoleKey.Backspace: 
+                    Console.WriteLine("게임 종료"); 
+                    Environment.Exit(0);
+                    break;
             }
+            
         }
         
     }
@@ -95,8 +94,23 @@ namespace Game.Scene
                 // 맵 
                 gameManager.RenderMap();
 
+                // 키 세팅 출력 
+                Console.SetCursorPosition(85, 0);
+                Console.WriteLine("========== [키 세팅] ==========");
+                Console.SetCursorPosition(85, 1);
+                Console.WriteLine("    ←↑↓→ : 이동");
+                Console.SetCursorPosition(85, 2);
+                Console.WriteLine("    W : 인벤토리");
+                Console.SetCursorPosition(85, 3);
+                Console.WriteLine("    BackSpace : 종료");
+                Console.SetCursorPosition(85, 4);
+                Console.WriteLine("===============================");
+
+                // 캐릭터 상태 출력                
+                player.ShowStatus();
+
                 // 행동 UI 
-                Console.SetCursorPosition(0, 0);
+                Console.SetCursorPosition(0, 30);
                 ActionMenu.ShowActions(manager);
 
                 key = Console.ReadKey(true);
@@ -114,27 +128,7 @@ namespace Game.Scene
         public override void Unload() { }
     }
     #endregion
-    #region 캐릭터씬
-    public class CharacterScene : Scene
-    {
-        private CPlayer player;
-        public CharacterScene(CPlayer player)
-        {
-            this.player = player;
-        }     
 
-        public override void Load(SceneManager manager)
-        {
-            Console.WriteLine("      [캐릭터 정보창]");
-            player.ShowStatus();
-            Console.WriteLine("아무 키나 누르면 메인 메뉴로...");
-            Console.ReadKey();
-            Console.Clear();
-            manager.ChangeScene(SceneType.Action);
-        }
-        public override void Unload() { }
-    }
-    #endregion
     #region 인벤토리씬
     public class InventoryScene : Scene
     {
@@ -150,7 +144,7 @@ namespace Game.Scene
             Console.WriteLine();
             player.Inventory.ShowInventory();
 
-            Console.WriteLine("아이템 번호 입력시 장착 / 아무 키나 누르면 메인 메뉴로..");
+            Console.WriteLine("아이템 번호 입력시 장착 \n 아무 키나 누르면 메인 메뉴로..");
             if (int.TryParse(Console.ReadLine(), out int num))
             {
                 var item = player.Inventory.GetItemByIndex(num);
@@ -163,8 +157,8 @@ namespace Game.Scene
                     Console.WriteLine("해당 번호의 아이템이 없습니다");
                 }
             }
-            Console.Clear() ;
-            manager.ChangeScene(SceneType.Action);
+            
+            manager.ChangeScene(SceneType.Game);
         }
         public override void Unload() { }
     }

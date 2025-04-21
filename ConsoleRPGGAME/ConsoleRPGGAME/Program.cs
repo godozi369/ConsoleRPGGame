@@ -21,6 +21,7 @@ namespace Program
             CPlayer player = new CPlayer("까비", 300, 15, 0, 150, Inven);
 
             CGameManager gameManager = new CGameManager();
+            Console.SetCursorPosition(20, 0);
             gameManager.Initialize();   // 맵 생성
 
             CShop shop = new CShop();
@@ -31,13 +32,12 @@ namespace Program
           
             // 씬 추가  ( 삭제 ) 
             SceneManager sceneManager = new SceneManager();
-            sceneManager.Register(SceneType.Action, new GameScene(gameManager, player));
-            sceneManager.Register(SceneType.PlayerStatus, new CharacterScene(player));
+            sceneManager.Register(SceneType.Game, new GameScene(gameManager, player));
             sceneManager.Register(SceneType.Inventory, new InventoryScene(player));
             
             
             // 기본 씬 설정
-            sceneManager.ChangeScene(SceneType.Action);
+            sceneManager.ChangeScene(SceneType.Game);
 
 
 

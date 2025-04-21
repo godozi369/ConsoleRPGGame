@@ -12,20 +12,20 @@ namespace Game.GameManager
         {
             // 스테이지 1 
             CMap map1_1 = new CMap();
-            map1_1.Initialize(20);
-            map1_1.SetPortal(18, 18);
+            map1_1.Initialize(12);
+            map1_1.SetPortal(10, 10);
             _stages.Add(map1_1);
 
             // 스테이지 2
             CMap map1_2 = new CMap();
-            map1_2.Initialize(20);
-            map1_2.SetPortal(18, 18);
+            map1_2.Initialize(12);
+            map1_2.SetPortal(10, 10);
             _stages.Add(map1_2);
 
             // 스테이지 3 
             CMap map1_3 = new CMap();
-            map1_3.Initialize(20);
-            map1_3.SetPortal(18, 18);
+            map1_3.Initialize(12);
+            map1_3.SetPortal(10, 10);
             _stages.Add(map1_3);
         }
         public void RenderMap()
@@ -38,8 +38,7 @@ namespace Game.GameManager
         {
             ConsoleKeyInfo cki;
             while (true)
-            {
-                Console.Clear();
+            {              
                 CMap currentMap = _stages[_currentStage];
                 currentMap.Render(_playerX, _playerY);
 

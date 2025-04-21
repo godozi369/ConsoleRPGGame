@@ -2,6 +2,7 @@
 using Game.NPC;
 using Game.Item;
 using System.Net.Http.Headers;
+using System;
 
 
 namespace Game.Player
@@ -31,21 +32,29 @@ namespace Game.Player
 
         public void ShowStatus()
         {
-            Console.WriteLine($"\n\t[{Name}]");
+            Console.SetCursorPosition(85, 5);
+            Console.WriteLine($"\t\t[{Name}]");
+            Console.SetCursorPosition(85, 6);
             Console.WriteLine($"[체력] {Hp}");
+            Console.SetCursorPosition(85, 7);
             Console.WriteLine($"[공격력] {Atk}");
+            Console.SetCursorPosition(85, 8);
             Console.WriteLine($"[방어력] {Def}");
-            Console.WriteLine($"[소지금] {Gold}GOLD");
+            Console.SetCursorPosition(85, 9);
+            Console.WriteLine($"[소지금] {Gold} GOLD");
             
             int totalAtk = Atk + ( EquipWeapon?.abil ?? 0 );
+            Console.SetCursorPosition(85, 10);
             Console.WriteLine($"[공격력] {Atk} + {EquipWeapon?.abil ?? 0} = {totalAtk}");
             
             if (EquipWeapon != null)
             {
+                Console.SetCursorPosition(85, 11);
                 Console.WriteLine($"[장착중인 무기] {EquipWeapon.name} (+{EquipWeapon.abil}) ");
             }
             if (EquipArmor != null)
             {
+                Console.SetCursorPosition(85, 11);
                 Console.WriteLine($"[장착중인 방어구] {EquipArmor.name} (+{EquipArmor.abil}) ");
             }
         }
