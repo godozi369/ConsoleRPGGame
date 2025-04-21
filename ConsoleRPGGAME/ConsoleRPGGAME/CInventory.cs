@@ -4,8 +4,7 @@ using Game.Player;
 namespace Game.Inventory
 {
     public class CInventory
-    {
-        
+    {        
         private List<CItem> InvenList;
         public CInventory()
         {
