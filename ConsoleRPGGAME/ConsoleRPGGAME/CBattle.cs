@@ -1,5 +1,6 @@
 ﻿using Game.Monster;
 using Game.Player;
+using Game.Util;
 
 namespace Game.Battle
 {
@@ -7,7 +8,8 @@ namespace Game.Battle
     {
         public void StartBattle(CPlayer player, CMonster monster)
         {
-            Console.Clear();
+            Helper.ClearFromLine(15);
+            Console.SetCursorPosition(0, 15);
             Console.WriteLine("================전투 시작================");
             Console.WriteLine($"\t{player.Name} VS {monster.Name}");
             while (player.Hp > 0 && monster.Hp > 0)
@@ -50,7 +52,8 @@ namespace Game.Battle
                 }
                 Console.WriteLine("계속하시려면 아무키나 누르세요");
                 Console.ReadLine();
-                Console.Clear();
+                Helper.ClearFromLine(15);
+                Console.SetCursorPosition(0, 15);
             }
         }
     }

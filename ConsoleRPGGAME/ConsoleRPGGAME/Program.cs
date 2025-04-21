@@ -20,13 +20,12 @@ namespace Program
             CInventory Inven = new CInventory();
             CPlayer player = new CPlayer("까비", 300, 15, 0, 150, Inven);
 
-            CGameManager gameManager = new CGameManager();
-            Console.SetCursorPosition(20, 0);
+            CGameManager gameManager = new CGameManager();          
             gameManager.Initialize();   // 맵 생성
-
-            CShop shop = new CShop();
-            CNPC npc = new NPC1("지나가는 행상인", shop);
+            gameManager.SetPlayer(player);
+            
             // npc.Interact(player); // npc상호작용 test
+            
 
             Inven.ShowInventory();
           

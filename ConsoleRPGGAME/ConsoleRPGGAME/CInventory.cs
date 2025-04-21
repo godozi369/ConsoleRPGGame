@@ -13,16 +13,18 @@ namespace Game.Inventory
 
         public int ShowInventory()
         {
+            Console.SetCursorPosition(0, 15);
+            Console.WriteLine("      [인벤토리]");         
             int itemCount = 0;
             foreach (var item in InvenList)
             {
                 itemCount++;
-                Console.WriteLine("=========================================");
+                Console.WriteLine("==================================");
                 Console.WriteLine($"{itemCount}.[{item.type}]{item.name}");
                 Console.WriteLine($"[정보] : {item.info}");
                 Console.WriteLine($"[능력치] : {item.abil}");
                 Console.WriteLine($"[가격] : {item.price}");
-                Console.WriteLine("=========================================");
+                Console.WriteLine("==================================");
             }
             return itemCount;
         }

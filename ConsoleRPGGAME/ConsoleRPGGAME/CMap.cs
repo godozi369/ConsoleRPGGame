@@ -1,8 +1,8 @@
-﻿
+﻿using Game.NPC;
 
 namespace Game.Map
 {
-    class CMap
+    public class CMap
     {
         public enum TileType
         {
@@ -41,11 +41,15 @@ namespace Game.Map
             ConsoleColor prevColor = Console.ForegroundColor; 
             for (int y = 0; y < _size; y++) 
             {
-                Console.SetCursorPosition(_size*2, y);
+                Console.SetCursorPosition(_size*3, y);
                 for (int x = 0; x < _size; x++) 
                 {
                     if (x == playerX && y == playerY)
-                        Console.ForegroundColor = ConsoleColor.Red; // 캐릭터 위치 색
+                        Console.ForegroundColor = ConsoleColor.Red; // 캐릭터 위치 색                 
+                    else if (NPCList.Any(npc => npc.X == x && npc.Y == y))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green; // NPC 위치 색                      
+                    }
                     else
                         Console.ForegroundColor = GetTileColor(_tile[y, x]); // 현재 타일의 색을 설정
 
@@ -54,9 +58,8 @@ namespace Game.Map
                 Console.WriteLine();
             }
             Console.ForegroundColor = prevColor; // 이전 색상으로 복원
-        }
-
-        //타일의 종류에 따라 콘솔 글자색을 반환하는 메서드
+        }     
+        // 타일의 종류에 따라 콘솔 글자색을 반환하는 메서드
         public ConsoleColor GetTileColor(TileType type)
         {
             switch (type)
@@ -79,5 +82,24 @@ namespace Game.Map
             if (_tile[y, x] == TileType.Empty)
                 _tile[y, x] = TileType.portal;
         }
+
+        // NPC 배치 
+        public List<CNPC> NPCList = new();
+        public void AddNPC(CNPC npc)
+        {
+            NPCList.Add(npc);
+        }
+
+        // 플레이어와 NPC와 거리 계산
+        public CNPC GetNearByNPC(int playerX, int playerY)
+        {
+            foreach (var npc in NPCList)
+            {
+                if (Math.Abs(npc.X - playerX) + Math.Abs(npc.Y - playerY) == 1)
+                    return npc;
+            }
+            return null;
+        }
+
     }
 }

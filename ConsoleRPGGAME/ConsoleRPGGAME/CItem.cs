@@ -81,4 +81,5 @@ namespace Game.Item
             Console.WriteLine($"[{type}]{name} | {info} | 영혼흡수율 : +{abil} 가격 : {price}");
         }
     }
+
 }

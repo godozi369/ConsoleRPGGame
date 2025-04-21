@@ -1,6 +1,8 @@
 ﻿using Game.Item;
 using Game.Player;
 using Game.Inventory;
+using Game.GameManager;
+using Game.Util;
 
 namespace Game.NPC
 {
@@ -11,9 +13,13 @@ namespace Game.NPC
     public abstract class CNPC : INpcInteract
     {
         public string Name { get; private set; }
-        public CNPC(string name)
+        public int X { get; set; }
+        public int Y { get; set; }
+        public CNPC(string name, int x, int y)
         {
-            this.Name = name;
+            Name = name;
+            X = x;
+            Y = y;
         }
         public abstract void Interact(CPlayer player);              
     }
@@ -21,23 +27,30 @@ namespace Game.NPC
     public class NPC1 : CNPC
     {
         private CShop shop;
-        public NPC1(string name, CShop shop) : base(name) { this.shop = shop; } 
+        public NPC1(string name, int x, int y, CShop shop) : base(name, x, y) { this.shop = shop; } 
         public override void Interact(CPlayer player)
         {
-            Console.Clear();
+            // 널 오류 방어
+            if (shop == null)
+            {
+                Console.WriteLine("[에러] 상점 객체가 null입니다");
+                return;
+            }
+
+            Console.SetCursorPosition(0, 15);
             Console.WriteLine($"[{Name}] 안녕하신가! 모험가여! 혹시 필요한건 없는가?");
             Console.WriteLine($"[{player.Name}] 필요한게있는지 구경해보겠습니다(Y)");
             Console.WriteLine($"[{player.Name}] 다음에 오겠습니다 ㅎㅎ(N)");
             while (true)
             {
-                ConsoleKeyInfo key = Console.ReadKey();
+                var key = Console.ReadKey();
                 switch (key.Key)
-                {
+                {                   
                     case ConsoleKey.Y: shop.ShowShop(player); return;
                     case ConsoleKey.N: Console.WriteLine($"[{Name}] 다음은 없을지도 몰라! "); return;
                     default: Console.WriteLine($"[{Name}] 뭐하는겐가! 대답을 하라구!"); break;                    
                 }
-            }
+            }           
         }
     }
     public class CShop
@@ -58,7 +71,8 @@ namespace Game.NPC
         
         public void ShowCategory(ItemCategory category, CPlayer player)
         {
-            Console.Clear();
+            Helper.ClearFromLine(15);
+            Console.SetCursorPosition(0, 15);
             Console.WriteLine($"\t[{category}]\n");
 
             List<CItem> selectList = new List<CItem>();
@@ -96,7 +110,7 @@ namespace Game.NPC
                     {
                         player.Gold -= selectItem.price;
                         player.Inventory.AddItem(selectItem);
-                        Console.WriteLine($"[{player.Name}이 {selectItem.name}을(를) 구매했습니다!");
+                        Console.WriteLine($"[{player.Name}]가 {selectItem.name}을(를) 구매했습니다!");
                     }
                     else
                     {
@@ -112,14 +126,17 @@ namespace Game.NPC
             {
                 Console.WriteLine("숫자만 입력해주세요");
             }
-            Console.WriteLine("아무 키나 누르면 상점으로 돌아갑니다...");
-            Console.ReadKey(true);
+            Console.WriteLine("잠시후 창이 사라집니다");
+            Thread.Sleep(3000);
+            Helper.ClearFromLine(15);
+            Console.SetCursorPosition(0, 15);
         }
         public void ShowShop(CPlayer player)
         {           
             while (true)
             {
-                Console.Clear();
+                Helper.ClearFromLine(15);
+                Console.SetCursorPosition(0, 15);
                 Console.WriteLine("============상 점===========\n");
                 Console.WriteLine("\t1. 무기\n");
                 Console.WriteLine("\t2. 방어구\n");
@@ -137,8 +154,6 @@ namespace Game.NPC
                     case ConsoleKey.D4: 
                     default: Console.WriteLine("뭐하는짓이야!"); break;
                 }           
-
-
             }
         }
     }

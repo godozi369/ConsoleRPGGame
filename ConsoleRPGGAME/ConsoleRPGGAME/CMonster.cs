@@ -22,6 +22,7 @@ namespace Game.Monster
         }
     }
     
+
     public static class MonsterFactory
     {
         public static CMonster CreateMonkey()

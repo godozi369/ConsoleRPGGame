@@ -3,6 +3,8 @@ using Game.Player;
 using Game.NPC;
 using Game.GameManager;
 using Game.Map;
+using static System.Net.Mime.MediaTypeNames;
+using Game.Util;
 
 namespace Game.Scene
 {
@@ -19,31 +21,6 @@ namespace Game.Scene
     {
         public abstract void Load(SceneManager manager);
         public abstract void Unload();
-    }
-    public static class ActionMenu
-    {
-        public static void ShowActions(SceneManager manager)
-        {
-            Console.SetCursorPosition(0, 0);
-            Console.WriteLine("======행동======");
-            Console.WriteLine("[Q] 캐릭터 정보");
-            Console.WriteLine("[W] 인벤토리");
-            Console.WriteLine("[Back Space] 종료");
-
-           
-            var key = Console.ReadKey(true).Key;
-            switch (key)
-            {
-                case ConsoleKey.Q: manager.ChangeScene(SceneType.PlayerStatus); break;
-                case ConsoleKey.W: manager.ChangeScene(SceneType.Inventory); break;
-                case ConsoleKey.Backspace: 
-                    Console.WriteLine("게임 종료"); 
-                    Environment.Exit(0);
-                    break;
-            }
-            
-        }
-        
     }
     #region 씬매니저
     public class SceneManager
@@ -102,25 +79,72 @@ namespace Game.Scene
                 Console.SetCursorPosition(85, 2);
                 Console.WriteLine("    W : 인벤토리");
                 Console.SetCursorPosition(85, 3);
-                Console.WriteLine("    BackSpace : 종료");
+                Console.WriteLine("    엔터 : 상호작용");
                 Console.SetCursorPosition(85, 4);
+                Console.WriteLine("    BackSpace : 종료");
+                Console.SetCursorPosition(85, 5);
                 Console.WriteLine("===============================");
+
+                // UI 정보
+                Console.SetCursorPosition(65, 1);
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.Write("●");
+                Console.ResetColor();
+                Console.WriteLine(" : 벽");
+                Console.SetCursorPosition(65, 3);
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("●");
+                Console.ResetColor();
+                Console.WriteLine(" : 필드");
+                Console.SetCursorPosition(65, 5);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("●");
+                Console.ResetColor();
+                Console.WriteLine(" : 플레이어");
+                Console.SetCursorPosition(65, 7);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("●");
+                Console.ResetColor();
+                Console.WriteLine(" : NPC");
+                Console.SetCursorPosition(65, 9);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("●");
+                Console.ResetColor();
+                Console.WriteLine(" : 포탈");
 
                 // 캐릭터 상태 출력                
                 player.ShowStatus();
 
                 // 행동 UI 
-                Console.SetCursorPosition(0, 30);
-                ActionMenu.ShowActions(manager);
+                Console.SetCursorPosition(0, 0);
+               
+
+                // 키 세팅
 
                 key = Console.ReadKey(true);
                 switch (key.Key)
                 {
+                    case ConsoleKey.Enter:
+                        var currentMap = gameManager.GetCurrentMap();
+                        var npc = currentMap.GetNearByNPC(gameManager.PlayerX, gameManager.PlayerY);
+                        if (npc != null)
+                        {
+                            npc.Interact(gameManager.Player);
+                        }
+                        break;
+
                     case ConsoleKey.LeftArrow:
                     case ConsoleKey.RightArrow:
                     case ConsoleKey.UpArrow:
                     case ConsoleKey.DownArrow:
                         gameManager.playerMove(key.Key);
+                        break;
+                    case ConsoleKey.W:
+                        manager.ChangeScene(SceneType.Inventory);
+                        break;
+                    case ConsoleKey.Backspace:
+                        Console.WriteLine("게임 종료");
+                        Environment.Exit(0);
                         break;
                 }
             }
@@ -139,9 +163,7 @@ namespace Game.Scene
         }
 
         public override void Load(SceneManager manager)
-        {
-            Console.WriteLine("      [인벤토리]");
-            Console.WriteLine();
+        {            
             player.Inventory.ShowInventory();
 
             Console.WriteLine("아이템 번호 입력시 장착 \n 아무 키나 누르면 메인 메뉴로..");
@@ -157,8 +179,8 @@ namespace Game.Scene
                     Console.WriteLine("해당 번호의 아이템이 없습니다");
                 }
             }
-            
-            manager.ChangeScene(SceneType.Game);
+            Helper.ClearFromLine(15);
+            Console.SetCursorPosition(0, 15);
         }
         public override void Unload() { }
     }
