@@ -18,7 +18,7 @@ namespace Program
             Console.CursorVisible = false;  // 커서 숨기기
 
             CInventory Inven = new CInventory();
-            CPlayer player = new CPlayer("까비", 300, 15, 150, Inven);
+            CPlayer player = new CPlayer("까비", 300, 15, 0, 150, Inven);
             
             CShop shop = new CShop();
             CNPC npc = new NPC1("지나가는 행상인", shop);
@@ -29,19 +29,19 @@ namespace Program
             SceneManager sceneManager = new SceneManager();
             
             // 씬 추가  ( 삭제 ) 
-            sceneManager.AddScene("MainMenu", new MainMenuScene());
-            sceneManager.AddScene("Game", new GameScene());
-            sceneManager.AddScene("Character", new CharacterScene(player));
-            sceneManager.AddScene("Inventory", new InventoryScene(player));
+            sceneManager.Register(SceneType.MainMenu, new MainMenuScene());
+            sceneManager.Register(SceneType.Map, new GameScene());
+            sceneManager.Register(SceneType.PlayerStatus, new CharacterScene(player));
+            sceneManager.Register(SceneType.Inventory, new InventoryScene(player));
             
             
             // 기본 씬 설정
-            sceneManager.ChangeScene("MainMenu");
+            sceneManager.ChangeScene(SceneType.MainMenu);
 
 
-            // CGameManager game = new CGameManager();
-            // game.Initialize();
-            // game.playerMove();
+            CGameManager game = new CGameManager();
+            game.Initialize();
+            game.playerMove();
 
 
         }

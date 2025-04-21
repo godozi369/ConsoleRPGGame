@@ -32,18 +32,21 @@ namespace Game.Player
         public void ShowStatus()
         {
             Console.WriteLine($"\n\t[{Name}]");
-            Console.WriteLine($"소지금 : {Gold}");
+            Console.WriteLine($"[체력] {Hp}");
+            Console.WriteLine($"[공격력] {Atk}");
+            Console.WriteLine($"[방어력] {Def}");
+            Console.WriteLine($"[소지금] {Gold}GOLD");
             
             int totalAtk = Atk + ( EquipWeapon?.abil ?? 0 );
-            Console.WriteLine($"공격력 : {Atk} + {EquipWeapon?.abil ?? 0} = {totalAtk}");
+            Console.WriteLine($"[공격력] {Atk} + {EquipWeapon?.abil ?? 0} = {totalAtk}");
             
             if (EquipWeapon != null)
             {
-                Console.WriteLine($"[장착중인 무기] : {EquipWeapon.name} (+{EquipWeapon.abil}) ");
+                Console.WriteLine($"[장착중인 무기] {EquipWeapon.name} (+{EquipWeapon.abil}) ");
             }
             if (EquipArmor != null)
             {
-                Console.WriteLine($"[장착중인 방어구] : {EquipArmor.name} (+{EquipArmor.abil}) ");
+                Console.WriteLine($"[장착중인 방어구] {EquipArmor.name} (+{EquipArmor.abil}) ");
             }
         }
         public void EquipItem(CItem item)

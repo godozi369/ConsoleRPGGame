@@ -39,5 +39,13 @@ namespace Game.Inventory
             player.Gold += item.price;
             Console.WriteLine($"[소지금] : {player.Gold} + {item.price/2} = {player.Gold + item.price/2}");
         }
+        public CItem GetItemByIndex(int index)
+        {
+            if (index > 0 && index <= InvenList.Count)
+            {
+                return InvenList[index - 1];
+            }
+            else { return null; }
+        }
     }
 }
