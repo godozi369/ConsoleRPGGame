@@ -51,17 +51,17 @@ namespace Game.Battle
 
                         // 드랍 아이템 확률 설정
                         Random rand = new Random();
-                        float dropChance = rand.Next(0, 101);
+                        float dropChance = rand.Next(100);
 
                         CItem drop = null;
 
                         if (monster.Name == "원숭이" && dropChance < 50)
                         {
-                            drop = new Fragment("파편", "원숭이 영혼 파편", "원숭이의 영혼이 담긴 파편입니다", 3, 1, 1);
+                            drop = new Fragment("고기", "원숭이 고기", "먹기 싫게 생긴 원숭이 고기", 3, 1, 1);
                         }
                         else if (monster.Name == "늑대" && dropChance < 30)
                         {
-                            drop = new Fragment("파편", "늑대 영혼 파편", "늑대의 영혼이 담긴 파편", 3, 1, 1);   
+                            drop = new Fragment("고기", "늑대 고기", "늑대 고기", 3, 1, 1);   
                         }
 
                         if (drop != null)

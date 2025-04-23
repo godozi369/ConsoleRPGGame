@@ -66,8 +66,7 @@ namespace Game.Scene
             ConsoleKeyInfo key;
 
             while (true)
-            {
-                               
+            {                     
                 // 맵 
                 gameManager.RenderMap();
 
@@ -77,12 +76,14 @@ namespace Game.Scene
                 Console.SetCursorPosition(85, 1);
                 Console.WriteLine("    ←↑↓→ : 이동");
                 Console.SetCursorPosition(85, 2);
-                Console.WriteLine("    W : 인벤토리");
+                Console.WriteLine("    Q : 활동모드 변경");
                 Console.SetCursorPosition(85, 3);
-                Console.WriteLine("    Spacebar : 상호작용");
+                Console.WriteLine("    W : 인벤토리");
                 Console.SetCursorPosition(85, 4);
-                Console.WriteLine("    BackSpace : 종료");
+                Console.WriteLine("    Spacebar : 상호작용");
                 Console.SetCursorPosition(85, 5);
+                Console.WriteLine("    BackSpace : 종료");
+                Console.SetCursorPosition(85, 6);
                 Console.WriteLine("===============================");
 
                 // UI 정보
@@ -145,6 +146,9 @@ namespace Game.Scene
                         break;
                     case ConsoleKey.W:
                         manager.ChangeScene(SceneType.Inventory);
+                        break;
+                    case ConsoleKey.Q:
+                        gameManager.SelectMode(gameManager.Player);
                         break;
                     case ConsoleKey.Backspace:
                         Console.WriteLine("게임 종료");

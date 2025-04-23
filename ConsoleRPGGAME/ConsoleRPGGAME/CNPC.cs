@@ -141,9 +141,9 @@ namespace Game.NPC
                 Helper.ClearFromLine(15);
                 Console.SetCursorPosition(0, 15);
                 Console.WriteLine("============상 점===========\n");
-                Console.WriteLine("\t1. 무기\n");
-                Console.WriteLine("\t2. 방어구\n");
-                Console.WriteLine("\t3. 포션\n");
+                Console.WriteLine("\t1. 도구\n");
+                Console.WriteLine("\t2. 옷\n");
+                Console.WriteLine("\t3. 잡화\n");
                 Console.WriteLine("\t4. 판매\n");
                 Console.Write("카테고리 번호를 입력하세요 : ");
 

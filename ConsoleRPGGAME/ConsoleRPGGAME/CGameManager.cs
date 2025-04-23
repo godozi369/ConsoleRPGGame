@@ -6,11 +6,15 @@ using Game.NPC;
 using Game.Player;
 using Game.Item;
 using Game.Util;
+using static Game.Player.CPlayer;
+using System.Numerics;
+using Game.Collect;
 
 namespace Game.GameManager
-{
+{  
     public class CGameManager
-    {       
+    {
+        Random rand = new Random();
         List<CMap> _stages = new List<CMap>();
         int _currentStage = 0;
         int _playerX = 1, _playerY = 1;
@@ -65,6 +69,7 @@ namespace Game.GameManager
                         
             int nextX = _playerX, nextY = _playerY;
 
+
             switch (key)
             {
                 case ConsoleKey.LeftArrow: nextX--; break;
@@ -83,6 +88,9 @@ namespace Game.GameManager
 
             _playerX = nextX;
             _playerY = nextY;
+
+            // 행동 작용 메서드
+            TryFieldInteraction(_player);
 
             // 포탈 타일 위에 잇으면 맵 이동 
             if (currentMap._tile[_playerY, _playerX] == CMap.TileType.portal)
@@ -150,8 +158,8 @@ namespace Game.GameManager
             Console.WriteLine("낚시를 시도합니다...");
             Thread.Sleep(1000);
 
-            Random rand = new Random();
-            if (rand.Next(0, 100) < 50)
+            
+            if (rand.Next(0, 100) < 30)
             {
                 CItem fish = null;
 
@@ -172,20 +180,126 @@ namespace Game.GameManager
                 }
 
                 player.Inventory.AddItem(fish);
-                Console.WriteLine($"[낚시 성공!] {fish.name}을 잡았습니다!!!");
+                Console.WriteLine($"[낚시 성공!] {fish.name}을 잡았습니다!!!");   
             }
-
             else
             {
-                Console.WriteLine("아무것도 잡히지 않았습니다 ㅠ");
-                Console.WriteLine($"스트레스로 체력 일부를 잃었습니다");
-                player.Hp -
+                Console.WriteLine("아무것도 잡히지 않았습니다 ㅠ"); 
             }
-
-
+            Console.WriteLine($"스트레스로 체력 10을 잃었습니다");
+            player.Hp -= 10;
 
             Thread.Sleep(1000);
             Helper.ClearFromLine(15);
+        }
+        public void SelectMode(CPlayer player)
+        {
+            Helper.ClearFromLine(15);
+            Console.SetCursorPosition(0, 15);
+            Console.Write("[모드를 선택하세요]");
+            Console.Write("\n1. 벌목");
+            Console.Write("\n2. 채집");
+            Console.Write("\n3. 채광");
+            Console.WriteLine("\n0. 해제");
+
+            string input = Console.ReadLine();
+            switch (input)
+            {
+                case "1": player.CurrentMode = ActivityMode.벌목모드; break;
+                case "2": player.CurrentMode = ActivityMode.채집모드; break;
+                case "3": player.CurrentMode = ActivityMode.채광모드; break;              
+                case "0": player.CurrentMode = ActivityMode.None; break;
+                default: return;
+                
+            }
+
+            Console.WriteLine("계속하려면 아무 키나 눌러,,,");
+            Console.ReadKey();
+            Thread.Sleep(1000);
+            Helper.ClearFromLine(15);
+        }
+        public void TryFieldInteraction(CPlayer player)
+        {
+            if (player.CurrentMode == ActivityMode.None)
+                return;
+
+            
+            if (rand.Next(100) < 20) 
+            {
+                List<CCollect> mix = null;
+
+                switch (player.CurrentMode)
+                {   
+                    case ActivityMode.벌목모드:
+                        mix = GetTreesByStage(_currentStage);
+                        break;
+                    case ActivityMode.채집모드:
+                        mix = GetHerbsByStage(_currentStage);
+                        break;
+                    case ActivityMode.채광모드:
+                        mix = GetOresByStage(_currentStage);
+                        break;
+                }
+                if (mix != null && mix.Count > 0)
+                {
+                    var selected = mix[rand.Next(mix.Count)];
+
+                    Console.SetCursorPosition(0, 16);
+                    Console.WriteLine($"[{selected.Name}] 발견! {selected.Description}");
+                    Console.Write("채집하시겠습니까? (Y/N): ");
+
+                    var key = Console.ReadKey(true).Key;
+                    if (key == ConsoleKey.Y)
+                    {
+                        Console.WriteLine($"\n[{selected.Name}] 채집 중... 체력 -10");
+                        Thread.Sleep(1000);
+
+                        player.Hp -= 10;
+                        selected.Collect(player);
+                    }
+                    else if (key == ConsoleKey.N)
+                    {
+                        Console.WriteLine("\n 아오 힘들어 안할래,,,");
+                        Thread.Sleep(500);
+                    }
+                    else
+                    {
+                        Console.WriteLine("난 뭘하고 싶은거지,,,");
+                    }
+
+                    Helper.ClearFromLine(16);
+                }
+            }
+        }
+        private List<CCollect> GetTreesByStage(int stage)
+        {
+            switch (stage)
+            {
+                case 0: return new List<CCollect> { new NormalTree(), new NormalTree(), new NormalTree() };
+                case 1: return new List<CCollect> { new AppleTree(), new NormalTree(), new NormalTree() };
+                case 2: return new List<CCollect> { new ShineTree(), new AppleTree(), new NormalTree() };
+                default: return new List<CCollect>();
+            }
+        }
+        private List<CCollect> GetHerbsByStage(int stage)
+        {
+            switch (stage)
+            {
+                case 0: return new List<CCollect> { new HealingHerb(), new PoisonHerb(), new PoisonHerb() };
+                case 1: return new List<CCollect> { new PoisonHerb(), new PoisonHerb(), new PoisonHerb() };
+                case 2: return new List<CCollect> { new HealingHerb(), new MagicHerb(), new PoisonHerb() };
+                default: return new List<CCollect>();
+            }
+        }
+        private List<CCollect> GetOresByStage(int stage)
+        {
+            switch (stage)
+            {
+                case 0: return new List<CCollect> { new StoneOre(), new StoneOre(), new StoneOre() };
+                case 1: return new List<CCollect> { new IronOre(), new StoneOre(), new StoneOre() };
+                case 2: return new List<CCollect> { new GoldOre(), new IronOre() , new StoneOre() };
+                default: return new List<CCollect>();
+            }
         }
     }
 }

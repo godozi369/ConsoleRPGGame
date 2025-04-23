@@ -36,33 +36,33 @@ namespace Game.Player
 
         public void ShowStatus()
         {
-            Console.SetCursorPosition(85, 6);
-            Console.WriteLine($"\t\t[{Name}]");
             Console.SetCursorPosition(85, 7);
-            Console.WriteLine($"[레벨] {Level}");
+            Console.WriteLine($"\t[{Name}]   [{CurrentMode}]");
             Console.SetCursorPosition(85, 8);
-            Console.WriteLine($"[체력] {Hp}");
+            Console.WriteLine($"[레벨] {Level}");
             Console.SetCursorPosition(85, 9);
-            Console.WriteLine($"[공격력] {Atk}");
+            Console.WriteLine($"[체력] {Hp}");
             Console.SetCursorPosition(85, 10);
-            Console.WriteLine($"[방어력] {Def}");
+            Console.WriteLine($"[공격력] {Atk}");
             Console.SetCursorPosition(85, 11);
-            Console.WriteLine($"[경험치] {Exp}");
+            Console.WriteLine($"[방어력] {Def}");
             Console.SetCursorPosition(85, 12);
+            Console.WriteLine($"[경험치] {Exp}");
+            Console.SetCursorPosition(85, 13);
             Console.WriteLine($"[소지금] {Gold} GOLD");
             
             int totalAtk = Atk + ( EquipWeapon?.abil ?? 0 );
-            Console.SetCursorPosition(85, 13);
+            Console.SetCursorPosition(85, 14);
             Console.WriteLine($"[공격력] {Atk} + {EquipWeapon?.abil ?? 0} = {totalAtk}");
             
             if (EquipWeapon != null)
             {
-                Console.SetCursorPosition(85, 14);
+                Console.SetCursorPosition(85, 15);
                 Console.WriteLine($"[장착중인 무기] {EquipWeapon.name} (+{EquipWeapon.abil}) ");
             }
             if (EquipArmor != null)
             {
-                Console.SetCursorPosition(85, 14);
+                Console.SetCursorPosition(85, 15);
                 Console.WriteLine($"[장착중인 방어구] {EquipArmor.name} (+{EquipArmor.abil}) ");
             }
         }
@@ -98,5 +98,16 @@ namespace Game.Player
                 Atk += 3;                
             }
         }
+
+        public enum ActivityMode
+        { 
+            None,
+            낚시모드,
+            벌목모드,
+            채집모드,
+            채광모드
+        }
+
+        public ActivityMode CurrentMode { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using Game.Scene;
 using Game.NPC;
 using Game.Map;
 using Game.GameManager;
+using Game.Audio;
 
 
 namespace Program
@@ -13,7 +14,11 @@ namespace Program
     internal class CProgram
     {
         static void Main()
-        {            
+        {   
+            // 배경음악
+            BgmPlayer bgm = new BgmPlayer();
+            bgm.Play("Music/君連れ去りし春.mp3");
+
             Console.OutputEncoding = System.Text.Encoding.UTF8; // 특수문자 사용 명령어
             Console.CursorVisible = false;  // 커서 숨기기
 

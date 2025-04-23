@@ -7,4 +7,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="MUSIC\君連れ去りし春.mp3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="MUSIC\君連れ去りし春.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Naudio" Version="2.2.1" />
+  </ItemGroup>
+
 </Project>
