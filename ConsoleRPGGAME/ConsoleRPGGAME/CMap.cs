@@ -7,12 +7,17 @@ namespace Game.Map
         public enum TileType
         {
             Empty, 
-            Wall, 
+            River, 
             portal  
         }
         const char CIRCLE = '\u25cf'; // 유니코드 문자로 출력하기 위한 상수 
         public TileType[,] _tile; // 2차원 배열로 맵의 각 타일 저장
         public int _size; // 맵의 크기
+        public string Name { get; set; } = "이름 없는 맵"; 
+        public void SetName(string name)
+        {
+            Name = name;
+        }
 
         public void Initialize(int size)
         {
@@ -25,7 +30,7 @@ namespace Game.Map
                     // 맵의 테두리 벽으로 만들기
                     if (x == 0 || x == _size - 1 || y == 0 || y == _size - 1)
                     {
-                        _tile[y, x] = TileType.Wall; // 벽타일 설정
+                        _tile[y, x] = TileType.River; // 벽타일 설정
                     }
                     else
                     {
@@ -45,10 +50,10 @@ namespace Game.Map
                 for (int x = 0; x < _size; x++) 
                 {
                     if (x == playerX && y == playerY)
-                        Console.ForegroundColor = ConsoleColor.Red; // 캐릭터 위치 색                 
+                        Console.ForegroundColor = ConsoleColor.White; // 캐릭터 위치 색                 
                     else if (NPCList.Any(npc => npc.X == x && npc.Y == y))
                     {
-                        Console.ForegroundColor = ConsoleColor.Green; // NPC 위치 색                      
+                        Console.ForegroundColor = ConsoleColor.DarkYellow; // NPC 위치 색                      
                     }
                     else
                         Console.ForegroundColor = GetTileColor(_tile[y, x]); // 현재 타일의 색을 설정
@@ -65,13 +70,13 @@ namespace Game.Map
             switch (type)
             {
                 case TileType.Empty:
-                    return ConsoleColor.Cyan;
-                case TileType.Wall:
-                    return ConsoleColor.DarkCyan;
+                    return ConsoleColor.Green;
+                case TileType.River:
+                    return ConsoleColor.DarkBlue; 
                 case TileType.portal:
-                    return ConsoleColor.Yellow;
-                default:
                     return ConsoleColor.Cyan;
+                default:
+                    return ConsoleColor.Green;
 
             }
         }
@@ -100,6 +105,7 @@ namespace Game.Map
             }
             return null;
         }
+       
 
     }
 }

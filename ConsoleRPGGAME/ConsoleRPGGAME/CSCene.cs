@@ -87,27 +87,27 @@ namespace Game.Scene
 
                 // UI 정보
                 Console.SetCursorPosition(65, 1);
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.Write("●");
                 Console.ResetColor();
-                Console.WriteLine(" : 벽");
+                Console.WriteLine(" : 강");
                 Console.SetCursorPosition(65, 3);
-                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("●");
                 Console.ResetColor();
                 Console.WriteLine(" : 필드");
                 Console.SetCursorPosition(65, 5);
-                Console.ForegroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.Write("●");
                 Console.ResetColor();
                 Console.WriteLine(" : 플레이어");
                 Console.SetCursorPosition(65, 7);
-                Console.ForegroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.Write("●");
                 Console.ResetColor();
                 Console.WriteLine(" : NPC");
                 Console.SetCursorPosition(65, 9);
-                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write("●");
                 Console.ResetColor();
                 Console.WriteLine(" : 포탈");
@@ -130,6 +130,10 @@ namespace Game.Scene
                         if (npc != null)
                         {
                             npc.Interact(gameManager.Player);
+                        }
+                        else if (gameManager.IsNearRiver(currentMap, gameManager.PlayerX, gameManager.PlayerY))
+                        {
+                            gameManager.TryFishing(gameManager.Player);
                         }
                         break;
 
@@ -166,13 +170,22 @@ namespace Game.Scene
         {            
             player.Inventory.ShowInventory();
 
-            Console.WriteLine("아이템 번호 입력시 장착 \n 아무 키나 누르면 메인 메뉴로..");
+            Console.WriteLine("아이템 번호 입력시 장착(사용) \n아무 키나 누르면 메인 메뉴로..");
             if (int.TryParse(Console.ReadLine(), out int num))
             {
                 var item = player.Inventory.GetItemByIndex(num);
                 if (item != null)
                 {
-                    player.EquipItem(item);
+                    if (item.category == ItemCategory.Potion)
+                    {
+                        player.Inventory.UseItem(num);
+                        player.Hp += item.abil;
+                        Console.WriteLine($"{player.Name}의 체력이 {item.abil}만큼 회복됐습니다. ");
+                    }
+                    else
+                    {
+                        player.EquipItem(item);
+                    }
                 }
                 else
                 {

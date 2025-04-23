@@ -1,4 +1,5 @@
-﻿using Game.Item;
+﻿using Game.Inventory;
+using Game.Item;
 using Game.Monster;
 using Game.Player;
 using Game.Util;
@@ -17,11 +18,13 @@ namespace Game.Battle
            
             while (player.Hp > 0 && monster.Hp > 0)
             {
+                int playerDamage = player.Atk + (player.EquipWeapon?.abil ?? 0);
                 Helper.ClearFromLine(16);
                 Console.SetCursorPosition(0, 16);              
                 Console.WriteLine($"============{turn}번째 턴============ ");
                 turn++;
                 Console.WriteLine($"\t[{player.Name}] VS [{monster.Name}]");
+                Console.WriteLine($"[{player.Name}] 체력 : {player.Hp} 공격력 : {playerDamage}");
                 monster.ShowStatus();
                 Console.WriteLine("[1] 공격 [2] 아이템 사용 [3] 도망");
                 Console.Write("[입력] : ");
@@ -31,7 +34,6 @@ namespace Game.Battle
                 {
                     Helper.ClearFromLine(21);
                     Console.SetCursorPosition(0, 21);
-                    int playerDamage = player.Atk + (player.EquipWeapon?.abil ?? 0);
                     monster.Hp -= playerDamage;
                     player.Hp -= monster.Atk;
                     Console.WriteLine($"[{player.Name}]의 공격!!!");
@@ -55,11 +57,11 @@ namespace Game.Battle
 
                         if (monster.Name == "원숭이" && dropChance < 50)
                         {
-                            drop = new Fragment("파편", "원숭이 영혼 파편", "원숭이의 영혼이 담긴 파편입니다", 3, 1);
+                            drop = new Fragment("파편", "원숭이 영혼 파편", "원숭이의 영혼이 담긴 파편입니다", 3, 1, 1);
                         }
                         else if (monster.Name == "늑대" && dropChance < 30)
                         {
-                            drop = new Fragment("파편", "늑대 영혼 파편", "늑대의 영혼이 담긴 파편", 3, 1);   
+                            drop = new Fragment("파편", "늑대 영혼 파편", "늑대의 영혼이 담긴 파편", 3, 1, 1);   
                         }
 
                         if (drop != null)
@@ -87,7 +89,15 @@ namespace Game.Battle
                 // 수정 필요 
                 else if ( key == "2")
                 {
-                    Console.WriteLine("아이템을 사용한다");
+                    Helper.ClearFromLine(15);
+
+                    CInventory inventory = player.Inventory;
+                    inventory.ShowInventory();
+
+                    Console.WriteLine("\n아이템을 사용하거나 아무 키나 누르면 전투로 돌아갑니다");
+                    Console.ReadKey();
+
+                    Helper.ClearFromLine(15);
                 }
                 else if ( key == "3")
                 {

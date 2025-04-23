@@ -28,6 +28,7 @@ namespace Game.NPC
     {
         private CShop shop;
         public NPC1(string name, int x, int y, CShop shop) : base(name, x, y) { this.shop = shop; } 
+        
         public override void Interact(CPlayer player)
         {
             // 널 오류 방어
@@ -58,15 +59,15 @@ namespace Game.NPC
         private List<CItem> ShopList = new List<CItem>();
         public CShop()
         {
-            ShopList.Add(new Weapon("무기", "녹슨 단검", "공격력", 10, 100));
-            ShopList.Add(new Weapon("무기", "쪼개진 망치", "공격력", 15, 150));
-            ShopList.Add(new Weapon("무기", "나무 활", "공격력", 12, 120));
-            ShopList.Add(new Armor("방어구", "가죽 아머", "방어력", 3, 90));
-            ShopList.Add(new Armor("방어구", "천 아머", "방어력", 2, 60));
-            ShopList.Add(new Armor("방어구", "금이 간 강철 아머", "방어력", 6, 180));
-            ShopList.Add(new Potion("포션", "냄새나는 포션", "체력 회복", 10, 10));
-            ShopList.Add(new Potion("포션", "탁한 포션", "체력 회복", 30, 30));
-            ShopList.Add(new Potion("포션", "바카스", "응가누", 3, 15));            
+            ShopList.Add(new Weapon("무기", "녹슨 단검", "공격력", 10, 100, 1));
+            ShopList.Add(new Weapon("무기", "쪼개진 망치", "공격력", 15, 150, 1));
+            ShopList.Add(new Weapon("무기", "나무 활", "공격력", 12, 120, 1));
+            ShopList.Add(new Armor("방어구", "가죽 아머", "방어력", 3, 90, 1));
+            ShopList.Add(new Armor("방어구", "천 아머", "방어력", 2, 60, 1));
+            ShopList.Add(new Armor("방어구", "금이 간 강철 아머", "방어력", 6, 180, 1));
+            ShopList.Add(new Potion("포션", "냄새나는 포션", "체력 회복", 10, 10, 1));
+            ShopList.Add(new Potion("포션", "탁한 포션", "체력 회복", 30, 30, 1));
+            ShopList.Add(new Potion("포션", "바카스", "응가누", 3, 15, 1));            
         }
         
         public void ShowCategory(ItemCategory category, CPlayer player)
@@ -104,9 +105,9 @@ namespace Game.NPC
                     Console.SetCursorPosition(0, 15);
                     return;
                 }
-                if (choice >= 1 && choice <= ShopList.Count)
+                if (choice >= 1 && choice <= selectList.Count)
                 {
-                    var selectItem = ShopList[choice - 1];
+                    var selectItem = selectList[choice - 1];
                     if (player.Gold >= selectItem.price)
                     {
                         player.Gold -= selectItem.price;
@@ -121,14 +122,15 @@ namespace Game.NPC
                 else
                 {
                     Console.WriteLine("잘못된 번호입니다");
+                    Thread.Sleep(1000);
                 }
             }
             else
             {
                 Console.WriteLine("숫자만 입력해주세요");
             }
-            Console.WriteLine("잠시후 창이 사라집니다");
-            Thread.Sleep(3000);
+            Console.WriteLine("아무키나 누르면 창이 사라집니다");
+            Console.ReadKey();
             Helper.ClearFromLine(15);
             Console.SetCursorPosition(0, 15);
         }
@@ -152,10 +154,63 @@ namespace Game.NPC
                     case ConsoleKey.D1: ShowCategory(ItemCategory.Weapon, player); return;
                     case ConsoleKey.D2: ShowCategory(ItemCategory.Armor, player); return;
                     case ConsoleKey.D3: ShowCategory(ItemCategory.Potion, player); return;
-                    case ConsoleKey.D4: 
+                    case ConsoleKey.D4: ShowSellMenu(player); return;
                     default: Console.WriteLine("뭐하는짓이야!"); break;
                 }           
             }
+        }
+        public void ShowSellMenu(CPlayer player)
+        {
+            Helper.ClearFromLine(15);
+            Console.SetCursorPosition(0, 15);
+            Console.WriteLine("======== [판매 메뉴] ========");
+
+            int count = player.Inventory.ShowInventory(); // 인벤토리 표시
+            if (count == 0)
+            {
+                Console.WriteLine("판매할 아이템이 없습니다.");
+                Thread.Sleep(1500);
+                return;
+            }
+
+            Console.WriteLine("\n판매할 아이템 번호를 입력하세요 (0 : 나가기)");
+
+            if (int.TryParse(Console.ReadLine(), out int choice))
+            {
+                if (choice == 0) return;
+
+                var item = player.Inventory.GetItemByIndex(choice);
+                if (item != null)
+                {
+                    int sellPrice = item.price / 2;
+
+                    // 수량이 2 이상이면 -1만
+                    if (item.quantity > 1)
+                    {
+                        item.quantity--;
+                        Console.WriteLine($"[판매] {item.name} 1개를 {sellPrice}G에 판매했습니다. (남은 수량: {item.quantity})");
+                    }
+                    else
+                    {
+                        player.Inventory.RemoveItem(item);
+                        Console.WriteLine($"[판매] {item.name}을 {sellPrice}G에 판매했습니다. (전부 판매됨)");
+                    }
+
+                    player.Gold += sellPrice;
+                    Console.WriteLine($"[소지금] 현재 GOLD: {player.Gold}");
+                }
+                else
+                {
+                    Console.WriteLine("해당 번호의 아이템이 없습니다.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("숫자만 입력하세요.");
+            }
+
+            Thread.Sleep(2000);
+            Helper.ClearFromLine(15);
         }
     }
 }

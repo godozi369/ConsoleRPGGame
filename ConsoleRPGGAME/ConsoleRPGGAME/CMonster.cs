@@ -23,7 +23,7 @@ namespace Game.Monster
         }
         public void ShowStatus()
         {
-            Console.WriteLine($"[{Type}] [{Name}] 체력 : {Hp} 공격력 : {Atk}");
+            Console.WriteLine($"[{Type}:{Name}] 체력 : {Hp} 공격력 : {Atk}");
         }
     }
     
