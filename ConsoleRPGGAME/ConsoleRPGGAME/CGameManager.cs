@@ -1,4 +1,6 @@
-﻿using Game.Map;
+﻿using Game.Battle;
+using Game.Map;
+using Game.Monster;
 using Game.NPC;
 using Game.Player;
 
@@ -44,7 +46,7 @@ namespace Game.GameManager
         }
 
 
-        public void playerMove(ConsoleKey key)
+        public void playerAction(ConsoleKey key)
         {                        
             CMap currentMap = _stages[_currentStage];
                         
@@ -78,6 +80,23 @@ namespace Game.GameManager
                 _playerY = 1;
             }
             
+            Random rand = new Random();
+            if (rand.Next(0, 100) < 20)
+            {
+                CMonster monster;
+                if (_currentStage == 0)
+                {
+                    monster = MonsterFactory.CreateMonkey();
+                }
+                else if (_currentStage == 1)
+                {
+                    monster = MonsterFactory.CreateWolf();
+                }
+                else return;
+
+                CBattle battle = new CBattle();
+                battle.StartBattle(_player, monster); 
+            }
         }
 
     }

@@ -50,7 +50,7 @@ namespace Game.NPC
                     case ConsoleKey.N: Console.WriteLine($"[{Name}] 다음은 없을지도 몰라! "); return;
                     default: Console.WriteLine($"[{Name}] 뭐하는겐가! 대답을 하라구!"); break;                    
                 }
-            }           
+            }            
         }
     }
     public class CShop
@@ -90,9 +90,8 @@ namespace Game.NPC
                 selectList[i].ShowInfo();
             }
 
-            Console.WriteLine("\n0. 이전으로 돌아가기");
-            Console.WriteLine($"소지골드 : {player.Gold}");
-            Console.Write($"구매할 아이템 번호를 입력하세요 : ");
+            Console.WriteLine("\n0. 이전으로 돌아가기");           
+            Console.Write($"\n구매할 아이템 번호를 입력하세요 : ");
             
 
             if (int.TryParse(Console.ReadLine(), out int choice))
@@ -101,6 +100,8 @@ namespace Game.NPC
                 {
                     Console.WriteLine("이전으로 돌아갑니다");
                     Console.ReadKey(true);
+                    Helper.ClearFromLine(15);
+                    Console.SetCursorPosition(0, 15);
                     return;
                 }
                 if (choice >= 1 && choice <= ShopList.Count)

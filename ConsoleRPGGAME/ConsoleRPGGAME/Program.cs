@@ -18,22 +18,16 @@ namespace Program
             Console.CursorVisible = false;  // 커서 숨기기
 
             CInventory Inven = new CInventory();
-            CPlayer player = new CPlayer("까비", 300, 15, 0, 150, Inven);
+            CPlayer player = new CPlayer("까비", 1, 300, 15, 0, 0, 150, Inven);
 
             CGameManager gameManager = new CGameManager();          
             gameManager.Initialize();   // 맵 생성
-            gameManager.SetPlayer(player);
-            
-            // npc.Interact(player); // npc상호작용 test
-            
-
-            Inven.ShowInventory();
-          
+            gameManager.SetPlayer(player);           
+                                  
             // 씬 추가  ( 삭제 ) 
             SceneManager sceneManager = new SceneManager();
             sceneManager.Register(SceneType.Game, new GameScene(gameManager, player));
-            sceneManager.Register(SceneType.Inventory, new InventoryScene(player));
-            
+            sceneManager.Register(SceneType.Inventory, new InventoryScene(player));           
             
             // 기본 씬 설정
             sceneManager.ChangeScene(SceneType.Game);

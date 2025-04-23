@@ -66,6 +66,8 @@ namespace Game.Player
                 Console.WriteLine($"[장착중인 방어구] {EquipArmor.name} (+{EquipArmor.abil}) ");
             }
         }
+
+        // 장비 장착
         public void EquipItem(CItem item)
         {
             switch (item.category)
@@ -80,6 +82,20 @@ namespace Game.Player
                     break;
                 default: Console.WriteLine("장착 불가능한 아이템입니다.");
                     break;
+            }
+        }
+
+        // 경험치 & 레벨업
+        public void GetExp(int amount)
+        {
+            Exp += amount;
+            if (Exp >= 100)
+            {
+                Level++;
+                Exp -= 100;
+                Console.WriteLine($"{Name}의 레벨이 {Level}이 되었습니다");
+                Hp += 15;
+                Atk += 3;                
             }
         }
     }

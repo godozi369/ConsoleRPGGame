@@ -25,6 +25,7 @@ namespace Game.Inventory
                 Console.WriteLine($"[능력치] : {item.abil}");
                 Console.WriteLine($"[가격] : {item.price}");
                 Console.WriteLine("==================================");
+                
             }
             return itemCount;
         }
@@ -32,7 +33,6 @@ namespace Game.Inventory
         public void AddItem(CItem item)
         {
             InvenList.Add(item);
-            Console.WriteLine($"[인벤토리] '{item.name}'이(가) 추가됨!");
         }
         public void SellItem(CItem item, CPlayer player)
         {

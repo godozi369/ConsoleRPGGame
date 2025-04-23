@@ -79,7 +79,7 @@ namespace Game.Scene
                 Console.SetCursorPosition(85, 2);
                 Console.WriteLine("    W : 인벤토리");
                 Console.SetCursorPosition(85, 3);
-                Console.WriteLine("    엔터 : 상호작용");
+                Console.WriteLine("    Spacebar : 상호작용");
                 Console.SetCursorPosition(85, 4);
                 Console.WriteLine("    BackSpace : 종료");
                 Console.SetCursorPosition(85, 5);
@@ -116,15 +116,15 @@ namespace Game.Scene
                 player.ShowStatus();
 
                 // 행동 UI 
-                Console.SetCursorPosition(0, 0);
-               
+                Console.SetCursorPosition(0, 0);              
 
                 // 키 세팅
 
                 key = Console.ReadKey(true);
                 switch (key.Key)
                 {
-                    case ConsoleKey.Enter:
+                    // NPC 상호작용 키
+                    case ConsoleKey.Spacebar:
                         var currentMap = gameManager.GetCurrentMap();
                         var npc = currentMap.GetNearByNPC(gameManager.PlayerX, gameManager.PlayerY);
                         if (npc != null)
@@ -137,7 +137,7 @@ namespace Game.Scene
                     case ConsoleKey.RightArrow:
                     case ConsoleKey.UpArrow:
                     case ConsoleKey.DownArrow:
-                        gameManager.playerMove(key.Key);
+                        gameManager.playerAction(key.Key);
                         break;
                     case ConsoleKey.W:
                         manager.ChangeScene(SceneType.Inventory);
