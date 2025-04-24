@@ -219,21 +219,13 @@ namespace Game.Scene
             player.Inventory.ShowInventory();
 
             Console.WriteLine("아이템 번호 입력시 장착(사용) \n아무 키나 누르면 메인 메뉴로..");
+
             if (int.TryParse(Console.ReadLine(), out int num))
             {
                 var item = player.Inventory.GetItemByIndex(num);
                 if (item != null)
                 {
-                    if (item.category == ItemCategory.Potion)
-                    {
-                        player.Inventory.UseItem(num);
-                        player.Hp += item.abil;
-                        Console.WriteLine($"{player.Name}의 체력이 {item.abil}만큼 회복됐습니다. ");
-                    }
-                    else
-                    {
-                        player.EquipItem(item);
-                    }
+                    player.Inventory.UseItem(num, player);                   
                 }
                 else
                 {

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 using System.Xml.Linq;
 using Game.Item;
 using Game.Player;
@@ -47,25 +48,35 @@ namespace Game.Inventory
                 InvenList.Add(item);
             }
         }      
-        public void UseItem(int index)
+        public void UseItem(int index, CPlayer player)
         {
             if (index >= 1 && index <= InvenList.Count)
             {
                 CItem item = InvenList[index - 1];
 
-                item.quantity -= 1;
-                Console.WriteLine($"[사용] {item.name}을(를) 사용했습니다! 남은 수량 : {item.quantity}");
-
+                Console.SetCursorPosition(0, 15);
+                if (item.category == ItemCategory.Potion)
+                {
+                    player.Hp += item.abil;
+                    Console.WriteLine($"{player.Name}의 체력이 {item.abil}만큼 회복되었습니다!");
+                }
+                else
+                {
+                    player.EquipItem(item);
+                    Console.WriteLine($"{item.name}을 장착했습니다!");
+                }
+                item.quantity--;
                 if (item.quantity <= 0)
                 {
-                    Console.WriteLine($"[삭제] {item.name}이(가) 인벤토리에서 사라졌습니다.");
-                    InvenList.RemoveAt(index - 1);
+                    InvenList.RemoveAt(index-1);
                 }
             }
             else
             {
                 Console.WriteLine("해당 번호의 아이템이 없습니다.");
             }
+            Thread.Sleep(1000);
+            Helper.ClearFromLine(15);
         }
         public void RemoveItem(CItem item)
         {

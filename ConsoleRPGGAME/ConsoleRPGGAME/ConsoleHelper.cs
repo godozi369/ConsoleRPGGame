@@ -23,6 +23,5 @@ namespace Game.Util
         }
     }
 }
-
 // Helper.ClearFromLine(15);
 // Console.SetCursorPosition(0, 15);

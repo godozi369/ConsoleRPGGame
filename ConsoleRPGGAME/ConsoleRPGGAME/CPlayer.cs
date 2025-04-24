@@ -79,8 +79,6 @@ namespace Game.Player
                 // 새 장비 장착
                 EquipTool = item as Tool;
                 Inventory.RemoveItem(EquipTool);
-
-                Console.WriteLine($"[장착 완료] {item.name}을(를) 장착했습니다!");
             }
             else if (item.category == ItemCategory.Cloth)
             {
@@ -90,12 +88,9 @@ namespace Game.Player
                 }
                 EquipCloth = item as Cloth;
                 Inventory.RemoveItem(EquipCloth);
-
-                Console.WriteLine($"[장착 완료] {item.name}을(를) 장착했습니다!");
             }
                    
         }
-
         // 경험치 & 레벨업
         public void GetExp(int amount)
         {
@@ -105,20 +100,18 @@ namespace Game.Player
                 Level++;
                 Exp -= 100;
                 Console.WriteLine($"{Name}의 레벨이 {Level}이 되었습니다");
-                Hp += 15;
+                Hp += 50;
                 Atk += 3;                
             }
         }
-
         public enum ActivityMode
-        { 
+        {
             백수모드,
             낚시모드,
             벌목모드,
             채집모드,
             채광모드
         }
-
         public ActivityMode CurrentMode { get; set; }
     }
 }

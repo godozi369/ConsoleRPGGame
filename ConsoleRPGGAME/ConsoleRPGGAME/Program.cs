@@ -39,9 +39,6 @@ namespace Program
             sceneManager.ChangeScene(SceneType.Intro);
             Console.Clear();
             sceneManager.ChangeScene(SceneType.Game);
-
-
-
         }
     }
 }

@@ -58,6 +58,7 @@ namespace Game.GameManager
         }
         public void RenderMap()
         {
+            // 맵 이름 출력 
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.SetCursorPosition(42, 0);
             Console.WriteLine($"[{_stages[_currentStage].Name}]");

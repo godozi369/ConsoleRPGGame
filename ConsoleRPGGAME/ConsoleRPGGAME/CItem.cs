@@ -23,7 +23,7 @@ namespace Game.Item
             this.info = info;
             this.quantity = quantity;
         }
-
+  
         public virtual void ShowInfo() { }
 
         private List<CItem> itemList = new List<CItem>();
