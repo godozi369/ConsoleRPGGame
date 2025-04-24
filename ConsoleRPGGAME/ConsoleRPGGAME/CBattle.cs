@@ -18,7 +18,7 @@ namespace Game.Battle
            
             while (player.Hp > 0 && monster.Hp > 0)
             {
-                int playerDamage = player.Atk + (player.EquipWeapon?.abil ?? 0);
+                int playerDamage = player.Atk + (player.EquipTool?.abil ?? 0);
                 Helper.ClearFromLine(16);
                 Console.SetCursorPosition(0, 16);              
                 Console.WriteLine($"============{turn}번째 턴============ ");

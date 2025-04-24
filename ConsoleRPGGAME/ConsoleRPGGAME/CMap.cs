@@ -46,7 +46,7 @@ namespace Game.Map
             ConsoleColor prevColor = Console.ForegroundColor; 
             for (int y = 0; y < _size; y++) 
             {
-                Console.SetCursorPosition(_size*3, y);
+                Console.SetCursorPosition(_size*3, y + 1);
                 for (int x = 0; x < _size; x++) 
                 {
                     if (x == playerX && y == playerY)

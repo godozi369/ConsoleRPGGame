@@ -5,6 +5,7 @@ using Game.GameManager;
 using Game.Map;
 using static System.Net.Mime.MediaTypeNames;
 using Game.Util;
+using Game.Audio;
 
 namespace Game.Scene
 {
@@ -202,4 +203,198 @@ namespace Game.Scene
         public override void Unload() { }
     }
     #endregion
+    public class FishingScene : Scene
+    {
+        public override void Load(SceneManager manager)
+        {
+          
+            Console.Clear();
+            string[] scene = new string[]
+            {
+            "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "BBBBBBBBBBBBBBBBBBBBBB|BBBBBBBBBBBBBBBBBBBBBBB",  // 낚싯줄
+            "BBBBBBBBBBBBBBBBBBBBBB|BBBBBBBBBBBBBBBBBBBBBBB",
+            "BBBBBBBBBBBBBBBBBBBBBB|BBBBBBBBBBBBBBBBBBBBBBB",
+            "BBBBBBBBBBBBBBBBBBBBBB|BBBBBBBBBBBBBBBBBBBBBBB",
+            "BBBBBBBBBBBBBBBBBBBBBB|BBBBBBBBBBBBBBBBBBBBBBB",
+            "BBBBBBBBBBBBBBBBBBBBBB|BBBBBBBBBBBBBBBBBBBBBBB",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",  
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",  
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",  
+            };
+
+            foreach (var line in scene)
+            {
+                foreach (char c in line)
+                {
+                    switch (c)
+                    {
+                        case 'B': Console.ForegroundColor = ConsoleColor.DarkBlue; Console.Write('■'); break; // 물
+                        case 'G': Console.ForegroundColor = ConsoleColor.Green; Console.Write('■'); break; // 땅
+                        case '|': Console.ForegroundColor = ConsoleColor.DarkRed; Console.Write('|'); break; // 낚싯줄
+                        default: Console.ResetColor(); Console.Write(' '); break;
+                    }
+                }
+                Console.WriteLine();
+            }
+
+            Console.ResetColor();
+            Console.WriteLine("\n[낚시 중] 물고기를 기다리는 중...");
+            Thread.Sleep(2000); // 연출 시간
+        }
+        public override void Unload() { }
+    }
+    public class MiningScene : Scene
+    {
+        public override void Load(SceneManager manager)
+        {
+           
+            Console.Clear();
+            string[] scene = new string[]
+            {
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGG######GGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGG###@######GGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGG@@##@@###*#GGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGG##@@@########GGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGG@@@#######@@@@@@GGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
+            };
+            foreach (var line in scene)
+            {
+                foreach (char c in line)
+                {
+                    switch (c)
+                    {
+                        case '*':
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write('★');
+                            break;
+                        case 'G':
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write('■');
+                            break;
+                        case '#':
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                            Console.Write('■');
+                            break;
+                        case '@':
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            Console.Write('■');
+                            break;
+                        default:
+                            Console.Write(' ');
+                            break;
+                    }
+                }
+                Console.WriteLine();
+            }
+            Console.ResetColor();
+            Console.WriteLine("\n[채광 중] 암석을 쿵! 쾅! 캡니다...");
+            Thread.Sleep(2000);
+        }
+        public override void Unload() { }
+    }
+    public class LoggingScene : Scene
+    {
+        public override void Load(SceneManager manager)
+        {
+            
+            Console.Clear();
+            string[] scene = new string[]
+            {
+            "SSSSSSSSSSSSSSSSSSSSSSWWSSWWWWSWWWWSSSSSSSSSSSSSSSSSSSSSSS",
+            "SSSSSSSSSSSSSSSSSSSSSWWWWWWWWWWWWWWWWWSSSSSSSSSSSSSSSSSSSS",
+            "SSSSSSSSSSSSSSSSSSSSWWWWWWWWWWWWWWWWWSSSSSSSSSSSSSSSSSSSSS",
+            "SSSSSSSSSSSSSSSSSSSWWWWWWWWWWWWWWWWWWWSSSSSSSSSSSSSSSSSSSS",
+            "SSSSSSSSSSSSSSSSSSSWWWWWWWWWWWWWWWWWWWSSSSSSSSSSSSSSSSSSSS",
+            "SSSSSSSSSSSSSSSSSSSWWWWWWWWWWWWWWWWWWWSSSSSSSSSSSSSSSSSSSS",
+            "SSSSSSSSSSSSSSSSSSSSWWWWXXWWWWXXWWWWWSSSSSSSSSSSSSSSSSSSSS",
+            "SSSSSSSSSSSSSSSSSSSSWWWWXXXWWXXWWWWWWSSSSSSSSSSSSSSSSSSSSS",
+            "SSSSSSSSSSSSSSSSSSSSSSSSXXXXXXXXSSSSSSSSSSSSSSSSSSSSSSSSSS",
+            "SSSSSSSSSSSSSSSSSSSSSSSSXXXXXXXXSSSSSSSSSSSSSSSSSSSSSSSSSS",
+            "TTTTTTTTTTTTTTTTTTTTTTTTXXXXXXXXTTTTTTTTTTTTTTTTTTTTTTTTTT",
+            "TTTTTTTTTTTTTTTTTTTTTTTTXXXXXXXXTTTTTTTTTTTTTTTTTTTTTTTTTT",
+            "TTTTTTTTTTTTTTTTTTTTTTTTXXXXXXXXTTTTTTTTTTTTTTTTTTTTTTTTTT"
+            };
+
+            foreach (var line in scene)
+            {
+                foreach (char c in line)
+                {
+                    switch (c)
+                    {
+                        case 'S': Console.ForegroundColor = ConsoleColor.Blue; break;          
+                        case 'T': Console.ForegroundColor = ConsoleColor.Green; break;
+                        case 'X': Console.ForegroundColor = ConsoleColor.DarkRed; break;
+                        case 'W': Console.ForegroundColor = ConsoleColor.DarkGreen; break;
+                        default: Console.ForegroundColor = ConsoleColor.Gray; break;      
+                    }
+                    Console.Write('■');
+                }   
+                Console.WriteLine();
+            }
+
+            Console.ResetColor();
+            Console.WriteLine("\n[벌목 중] 도끼질 쾅쾅! 나무를 패는 중...");
+            Thread.Sleep(2000);
+        }
+
+        public override void Unload() { }
+    }
+    public class CollectingScene : Scene
+    {
+        public override void Load(SceneManager manager)
+        {
+           
+            Console.Clear();
+            string[] scene = new string[]
+            {
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGG*GGG*GGGG*GGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGG**GG****G**GGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGG**********GGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGG********GGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+            };
+
+            foreach (var line in scene)
+            {
+                foreach (char c in line)
+                {
+                    switch (c)
+                    {
+                        case 'G':
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write('■');
+                            break;
+                        case '*':
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write('★');
+                            break;
+                        default:
+                            Console.Write(' ');
+                            break;
+                    }
+                }
+                Console.WriteLine();
+            }
+
+            Console.ResetColor();
+            Console.WriteLine("\n[채집 중] 약초를 조심스럽게 채취합니다...");
+            Thread.Sleep(2000);
+        }
+
+        public override void Unload() { }
+    }
 }

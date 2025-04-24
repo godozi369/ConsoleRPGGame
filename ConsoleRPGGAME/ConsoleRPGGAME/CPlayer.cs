@@ -3,6 +3,7 @@ using Game.NPC;
 using Game.Item;
 using System.Net.Http.Headers;
 using System;
+using Game.Util;
 
 
 namespace Game.Player
@@ -13,12 +14,12 @@ namespace Game.Player
         public int Level { get; set; }
         public int Hp { get; set; }
         public int Atk { get; set; }
-        public int Def { get; set; }
+        public int Vital { get; set; }
         public int Exp { get; set; }
         public int Gold { get; set; }
 
-        public Weapon EquipWeapon { get; set; }
-        public Armor EquipArmor { get; set; }
+        public Tool EquipTool { get; set; }
+        public Cloth EquipCloth { get; set; }
         public CInventory Inventory { get; set; }
 
         public CPlayer(string name,int level, int hp, int atk, int def, int exp, int gold, CInventory inven)
@@ -27,7 +28,7 @@ namespace Game.Player
             Level = level;
             Hp = hp;
             Atk = atk;
-            Def = def;
+            Vital = def;
             Exp = exp;
             Gold = gold;
             Inventory = inven;
@@ -43,46 +44,55 @@ namespace Game.Player
             Console.SetCursorPosition(85, 9);
             Console.WriteLine($"[체력] {Hp}");
             Console.SetCursorPosition(85, 10);
-            Console.WriteLine($"[공격력] {Atk}");
+            Console.WriteLine($"[활력] {Vital}");        
             Console.SetCursorPosition(85, 11);
-            Console.WriteLine($"[방어력] {Def}");
-            Console.SetCursorPosition(85, 12);
             Console.WriteLine($"[경험치] {Exp}");
-            Console.SetCursorPosition(85, 13);
-            Console.WriteLine($"[소지금] {Gold} GOLD");
+            Console.SetCursorPosition(85, 12);
+            Console.WriteLine($"[소지금] {Gold} GOLD");                                  
             
-            int totalAtk = Atk + ( EquipWeapon?.abil ?? 0 );
-            Console.SetCursorPosition(85, 14);
-            Console.WriteLine($"[공격력] {Atk} + {EquipWeapon?.abil ?? 0} = {totalAtk}");
-            
-            if (EquipWeapon != null)
+            if (EquipTool != null)
             {
-                Console.SetCursorPosition(85, 15);
-                Console.WriteLine($"[장착중인 무기] {EquipWeapon.name} (+{EquipWeapon.abil}) ");
+                Helper.ClearFromLine(13);
+                Console.SetCursorPosition(85, 13);
+                Console.WriteLine($"[장착중인 도구] {EquipTool.name}");
+                Console.SetCursorPosition(85, 14);
+                Console.WriteLine($"[효과] {EquipTool.info}");
             }
-            if (EquipArmor != null)
+            if (EquipCloth != null)
             {
                 Console.SetCursorPosition(85, 15);
-                Console.WriteLine($"[장착중인 방어구] {EquipArmor.name} (+{EquipArmor.abil}) ");
+                Console.WriteLine($"[장착중인 옷] {EquipCloth.name} (+{EquipCloth.abil}) ");
             }
         }
 
         // 장비 장착
         public void EquipItem(CItem item)
         {
-            switch (item.category)
+            if (item.category == ItemCategory.Tool)
             {
-                case ItemCategory.Weapon:
-                    EquipWeapon = (Weapon)item;
-                    Console.WriteLine($"[{item.type}] {item.name}을 장착했습니다");
-                    break;
-                case ItemCategory.Armor:
-                    EquipArmor = (Armor)item;
-                    Console.WriteLine($"[{item.type}] {item.name}을 장착했습니다");
-                    break;
-                default: Console.WriteLine("장착 불가능한 아이템입니다.");
-                    break;
+                // 이전 장비가 있을 경우 인벤토리로 돌려보냄
+                if (EquipTool != null)
+                {
+                    Inventory.AddItem(EquipTool);                   
+                }
+                // 새 장비 장착
+                EquipTool = item as Tool;
+                Inventory.RemoveItem(EquipTool);
+
+                Console.WriteLine($"[장착 완료] {item.name}을(를) 장착했습니다!");
             }
+            else if (item.category == ItemCategory.Cloth)
+            {
+                if (EquipCloth != null)
+                {
+                    Inventory.AddItem(EquipCloth);
+                }
+                EquipCloth = item as Cloth;
+                Inventory.RemoveItem(EquipCloth);
+
+                Console.WriteLine($"[장착 완료] {item.name}을(를) 장착했습니다!");
+            }
+                   
         }
 
         // 경험치 & 레벨업
@@ -101,7 +111,7 @@ namespace Game.Player
 
         public enum ActivityMode
         { 
-            None,
+            백수모드,
             낚시모드,
             벌목모드,
             채집모드,

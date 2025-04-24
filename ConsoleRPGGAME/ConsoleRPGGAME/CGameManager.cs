@@ -9,6 +9,9 @@ using Game.Util;
 using static Game.Player.CPlayer;
 using System.Numerics;
 using Game.Collect;
+using System.Runtime.CompilerServices;
+using Game.Scene;
+using Game.Audio;
 
 namespace Game.GameManager
 {  
@@ -100,7 +103,6 @@ namespace Game.GameManager
                 {
                     _currentStage = (_currentStage + 1) % _stages.Count;
                 }
-
                 // 이전 포탈
                 else if (_playerX == 1 && _playerY == 1)
                 {
@@ -151,36 +153,68 @@ namespace Game.GameManager
             return false;
         }
 
-
+        private bool isFishing = false;
         public void TryFishing(CPlayer player)
         {
+            if (isFishing) return;         
+            isFishing = true;
+
             Console.SetCursorPosition(0, 15);
-            Console.WriteLine("낚시를 시도합니다...");
+            if (player.EquipTool == null || !player.EquipTool.name.Contains("낚시대"))
+            {
+                Console.WriteLine("[낚시 실패] 낚시대를 장착해야 낚시할 수 있습니다!");
+                Thread.Sleep(1000);
+                Helper.ClearFromLine(15);
+                return;
+            }
+
+            BgmPlayer bgm = new BgmPlayer();
+            bgm.Play("MUSIC/fish.mp3");
+            var scene = new FishingScene();
+            scene.Load(null);
+            Console.SetCursorPosition(0, 15);
+            Console.Write("낚시를 시도합니다...");
+            int delay = GetDelayByToolName(player.EquipTool.name);
+            for (int i = 0; i < delay / 300; i++)
+            {
+                Console.Write(".");
+                Thread.Sleep(300);
+            }
+            Thread.Sleep(delay);
+            Console.WriteLine("\n오! 반응이 온다!");
             Thread.Sleep(1000);
 
             
-            if (rand.Next(0, 100) < 30)
+            if (rand.Next(0, 100) < 50)
             {
                 CItem fish = null;
+                int exp = 0;
 
                 switch (_currentStage)
                 {
                     case 0:
-                        fish = new Fragment("낚시", "못생긴 붕어", "체력 회복", 10, 10, 1);
+                        fish = new Fragment("물고기", "못생긴 붕어", "체력 회복", 10, 10, 1);
+                        exp = 5;
                         break;
                     case 1:
-                        fish = new Fragment("낚시", "썩은 숭어", "체력 회복", 20, 20, 1);
+                        fish = new Fragment("물고기", "썩은 숭어", "체력 회복", 20, 20, 1);
+                        exp = 10;
                         break;
                     case 2:
-                        fish = new Fragment("낚시", "냄새나는 메기", "체력회복", 30, 30, 1);
+                        fish = new Fragment("물고기", "냄새나는 메기", "체력회복", 30, 30, 1);
+                        exp = 15;
                         break;
                     default:
-                        fish = new Fragment("낚시", "통조림 통", "썩은내가 난다", 0, 0, 1);
+                        fish = new Fragment("물고기", "통조림 통", "썩은내가 난다", 0, 0, 1);
+                        exp = 1;
                         break;
                 }
 
                 player.Inventory.AddItem(fish);
-                Console.WriteLine($"[낚시 성공!] {fish.name}을 잡았습니다!!!");   
+                Console.WriteLine($"[낚시 성공!] {fish.name}을 잡았습니다!!!");
+
+                player.GetExp(exp);
+                Console.WriteLine($"[경험치] {exp} EXP를 획득했습니다!");
             }
             else
             {
@@ -188,9 +222,17 @@ namespace Game.GameManager
             }
             Console.WriteLine($"스트레스로 체력 10을 잃었습니다");
             player.Hp -= 10;
-
+            if (player.Hp <= 0)
+            {
+                Console.Clear();
+                Console.WriteLine("당신은 체력이 다해 쓰러졌습니다...");
+                Console.WriteLine("게임 오버");
+                Environment.Exit(0);
+            }
+            isFishing = false;           
+            bgm.Stop();
             Thread.Sleep(1000);
-            Helper.ClearFromLine(15);
+            Console.Clear();
         }
         public void SelectMode(CPlayer player)
         {
@@ -200,6 +242,7 @@ namespace Game.GameManager
             Console.Write("\n1. 벌목");
             Console.Write("\n2. 채집");
             Console.Write("\n3. 채광");
+            Console.Write("\n4. 낚시");
             Console.WriteLine("\n0. 해제");
 
             string input = Console.ReadLine();
@@ -207,24 +250,52 @@ namespace Game.GameManager
             {
                 case "1": player.CurrentMode = ActivityMode.벌목모드; break;
                 case "2": player.CurrentMode = ActivityMode.채집모드; break;
-                case "3": player.CurrentMode = ActivityMode.채광모드; break;              
-                case "0": player.CurrentMode = ActivityMode.None; break;
+                case "3": player.CurrentMode = ActivityMode.채광모드; break;
+                case "4": player.CurrentMode = ActivityMode.낚시모드; break;
+                case "0": player.CurrentMode = ActivityMode.백수모드; break;
                 default: return;
                 
             }
 
             Console.WriteLine("계속하려면 아무 키나 눌러,,,");
             Console.ReadKey();
-            Thread.Sleep(1000);
-            Helper.ClearFromLine(15);
-        }
-        public void TryFieldInteraction(CPlayer player)
-        {
-            if (player.CurrentMode == ActivityMode.None)
-                return;
-
+            Thread.Sleep(300);
             
-            if (rand.Next(100) < 20) 
+        }
+        public int GetDelayByToolName(string toolName)
+        {
+            return toolName switch
+            {
+                "허름한 낚시대" => rand.Next(2000, 3000),
+                "평범한 낚시대" => rand.Next(1500, 2500),
+                "고급 낚시대" => rand.Next(1200, 1800),
+                "금간 도끼" => rand.Next(2000, 3000),
+                "평범한 도끼" => rand.Next(1500, 2500),
+                "고급 도끼" => rand.Next(1200, 1800),
+                "녹슨 곡괭이" => rand.Next(2000, 3000),
+                "평범한 곡괭이" => rand.Next(1500, 2500),
+                "고급 곡괭이" => rand.Next(1200, 1800),
+                "낡은 가위" => rand.Next(2000, 3000),
+                "평범한 가위" => rand.Next(1500, 2500),
+                "고급 가위" => rand.Next(1200, 1800),
+                _ => rand.Next(1200, 1800)
+            };
+        }   
+        public void TryFieldInteraction(CPlayer player)
+        {           
+
+
+            if (player.CurrentMode == ActivityMode.백수모드)
+                return;
+            if (player.CurrentMode == ActivityMode.낚시모드)
+            {
+                if (IsNearRiver(GetCurrentMap(), _playerX, _playerY))
+                {
+                    TryFishing(player);
+                }
+            }
+          
+            if (rand.Next(100) < 15) 
             {
                 List<CCollect> mix = null;
 
@@ -248,16 +319,65 @@ namespace Game.GameManager
                     Console.WriteLine($"[{selected.Name}] 발견! {selected.Description}");
                     Console.Write("채집하시겠습니까? (Y/N): ");
 
-                    var key = Console.ReadKey(true).Key;
-                    if (key == ConsoleKey.Y)
+                    string input = Console.ReadLine()?.Trim().ToUpper();
+                    if (input == "Y")
                     {
-                        Console.WriteLine($"\n[{selected.Name}] 채집 중... 체력 -10");
-                        Thread.Sleep(1000);
+                        // 도구 확인
+                        if (!IsProperToolEquipped(player))
+                        {
+                            Console.WriteLine($"[{selected.Name}]를(을) 채집하려면 적절한 도구를 장착하세요");
+                            Thread.Sleep(1000);
+                            return;
+                        }
+                        BgmPlayer bgm = new BgmPlayer();
+
+                        // 씬 설정
+                        if (player.CurrentMode == ActivityMode.벌목모드)
+                        {
+                            bgm.Play("MUSIC/logging.mp3");
+                            new LoggingScene().Load(null);
+                            bgm.Stop();
+                        }
+                        else if (player.CurrentMode == ActivityMode.채집모드)
+                        {
+                            bgm.Play("MUSIC/scissor.mp3");
+                            new CollectingScene().Load(null);
+                            bgm.Stop();
+                        }
+                        else if (player.CurrentMode == ActivityMode.채광모드)
+                        {
+                            bgm.Play("MUSIC/mining.mp3");
+                            new MiningScene().Load(null);
+                            bgm.Stop();
+                        }
+
+                            // 도구별 딜레이설정
+                            int delay = GetDelayByToolName(player.EquipTool.name);
+                        Console.WriteLine($"\n[{selected.Name}] 채집 중(체력 - 10)");
+                        for (int i = 0; i < delay / 500; i++)
+                        {
+                            Console.Write(".");
+                            Thread.Sleep(500);
+                        }
+                        Thread.Sleep(delay);
 
                         player.Hp -= 10;
-                        selected.Collect(player);
+
+                    if (player.Hp <= 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("당신은 체력이 다해 쓰러졌습니다...");
+                        Console.WriteLine("게임 오버");
+                        Environment.Exit(0);  
                     }
-                    else if (key == ConsoleKey.N)
+
+                        selected.Collect(player);
+
+                        player.GetExp(selected.Exp);
+                        Console.WriteLine($"[경험치] {selected.Exp} EXP를 획득했습니다!");
+                        Thread.Sleep(1000);
+                    }
+                    else if (input == "N")
                     {
                         Console.WriteLine("\n 아오 힘들어 안할래,,,");
                         Thread.Sleep(500);
@@ -267,8 +387,27 @@ namespace Game.GameManager
                         Console.WriteLine("난 뭘하고 싶은거지,,,");
                     }
 
-                    Helper.ClearFromLine(16);
+                    Console.Clear();
                 }
+            }
+        }
+        private bool IsProperToolEquipped(CPlayer player)
+        {
+            if (player.EquipTool == null)
+                return false;
+
+            switch (player.CurrentMode)
+            {
+                case ActivityMode.벌목모드:
+                    return player.EquipTool.name.Contains("도끼"); 
+                case ActivityMode.채광모드:
+                    return player.EquipTool.name.Contains("곡괭이");
+                case ActivityMode.낚시모드:
+                    return player.EquipTool.name.Contains("낚시대");
+                case ActivityMode.채집모드:
+                    return player.EquipTool.name.Contains("가위"); 
+                default:
+                    return false;
             }
         }
         private List<CCollect> GetTreesByStage(int stage)

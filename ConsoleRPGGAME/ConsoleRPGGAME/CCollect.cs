@@ -6,26 +6,27 @@ namespace Game.Collect
 {
     public abstract class CCollect
     {
-        public virtual string Name { get; }
-        public virtual string Description { get; }
+        public abstract string Name { get; }
+        public abstract string Description { get; }
+        public abstract int Exp { get; }
 
-        public abstract void Collect(CPlayer player) { }
+        public abstract void Collect(CPlayer player);    
     }  
     public abstract class TreeCollect : CCollect
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-
-        public override void Collect(CPlayer player); 
+        public override string Name { get; }
+        public override string Description { get; }
+        public override int Exp { get; }
+        public override abstract void Collect(CPlayer player); 
     }
 
     public class NormalTree : TreeCollect
     {
-        public NormalTree()
-        {
-            Name = "평범한 나무";
-            Description = "울창한 숲에 어울리는 나무";
-        }
+        
+       
+        public override string Name => "평범한 나무";
+        public override string Description => "울창한 숲에 어울리는 나무";
+        public override int Exp => 5;
         public override void Collect(CPlayer player)
         {
             Console.WriteLine("[평범한 나무] 나무 조각을 얻었습니다!");
@@ -34,18 +35,17 @@ namespace Game.Collect
     }
     public class AppleTree : TreeCollect
     {
-        public AppleTree()
-        {
-            Name = "사과나무";
-            Description = "빨간 사과가 열려있다";
-        }
+        
+        public override string Name => "사과나무";
+        public override string Description => "빨간 사과가 열려있다";
+        public override int Exp => 10;
         public override void Collect(CPlayer player)
         {
             Random rand = new Random();
             if (rand.Next(100) < 80)
             {
                 Console.WriteLine($"[{Name}] 사과를 획득했습니다!");
-                player.Inventory.AddItem(new Potion("소비아이템", "사과", "HP 10 회복", 10, 10, 0));
+                player.Inventory.AddItem(new Potion("재료", "사과", "HP 10 회복", 10, 10, 0));
             }
             else
             {
@@ -55,30 +55,30 @@ namespace Game.Collect
     }
     public class ShineTree : TreeCollect
     {
-        public ShineTree()
-        {
-            Name = "희귀 나무";
-            Description = "잎사귀가 찬란하게 빛난다";
-        }
+        
+     
+        public override string Name => "희귀 나무";
+        public override string Description => "잎사귀가 찬란하게 빛난다";
+        public override int Exp => 15;
         public override void Collect(CPlayer player)
         {
             Console.WriteLine("[희귀 나무] 빛나는 잎을 획득했습니다!");
-            player.Inventory.AddItem(new Potion("아이템", "빛나는 잎", "HP 333 회복", 333, 333, 0));
+            player.Inventory.AddItem(new Potion("재료", "빛나는 잎", "HP 333 회복", 333, 333, 0));
         }
     }
     public abstract class HerbCollect : CCollect
     {
-        public string Name { get; set;}
-        public string Description { get; set; }
-        public override void Collect(CPlayer player);
+        public override string Name { get; }
+        public override string Description { get; }
+        public abstract override void Collect(CPlayer player);
     }
     public class HealingHerb : HerbCollect
     {
-        public HealingHerb()
-        {
-            Name = "회복초";
-            Description = "자연 치유력이 깃든 약초.";
-        }
+     
+     
+        public override string Name => "회복초";
+        public override string Description => "자연 치유력이 깃든 약초.";
+        public override int Exp => 6;
         public override void Collect(CPlayer player)
         {
             Console.WriteLine("[회복초] HP 15 회복!");
@@ -87,12 +87,10 @@ namespace Game.Collect
     }
 
     public class PoisonHerb : HerbCollect
-    {
-        public PoisonHerb()
-        {
-            Name = "독초";
-            Description = "어딘가 위험해보이는 약초";
-        }
+    { 
+        public override string Name => "독초";
+        public override string Description => "어딘가 위험해보이는 약초";
+        public override int Exp => 10;
         public override void Collect(CPlayer player)
         {
             Console.WriteLine("[독초] 상태이상: 중독 (확률적)");
@@ -101,11 +99,11 @@ namespace Game.Collect
     }
     public class MagicHerb : HerbCollect
     {
-        public MagicHerb()
-        {
-            Name = "마법초";
-            Description = "신비한 힘이 느껴지는 약초";
-        }
+   
+    
+        public override string Name => "마법초";
+        public override string Description => "신비한 힘이 느껴지는 약초";
+        public override int Exp => 18;
         public override void Collect(CPlayer player)
         {
             Console.WriteLine("[마법초] 상태이상: 각성");
@@ -115,17 +113,15 @@ namespace Game.Collect
 
     public abstract class MineralCollect : CCollect
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public override void Collect(CPlayer player);
+        public override string Name { get; }
+        public override string Description { get; }
+        public abstract override void Collect(CPlayer player);
     }
     public class StoneOre : MineralCollect
-    {
-        public StoneOre()
-        {
-            Name = "돌덩이";
-            Description = "단단해보이는 돌덩이";
-        }
+    {  
+        public override string Name => "돌덩이";
+        public override string Description => "단단해보이는 돌덩이";
+        public override int Exp => 6;
         public override void Collect(CPlayer player)
         {
             Console.WriteLine($"{Name}");
@@ -134,11 +130,9 @@ namespace Game.Collect
     }
     public class IronOre : MineralCollect
     {
-        public IronOre()
-        {
-            Name = "철광석";
-            Description = "은은한 빛이 돈다";
-        }
+        public override string Name => "철광석";
+        public override string Description => "은은한 빛이 돈다";
+        public override int Exp => 12;
         public override void Collect(CPlayer player)
         {
             Console.WriteLine($"{Name}");
@@ -147,16 +141,15 @@ namespace Game.Collect
     }
     public class GoldOre : MineralCollect
     {
-        public GoldOre()
-        {
-            Name = "금광석";
-            Description = "금빛이 강렬하다";
-        }
+        public override string Name => "금광석";
+        public override string Description => "금빛이 강렬하다";
+        public override int Exp => 20;
         public override void Collect(CPlayer player)
         {
             Console.WriteLine($"{Name}");
             player.Inventory.AddItem(new Fragment("광석", "금광석", Description, 9, 90, 0));
         }
     }
+
 
 }

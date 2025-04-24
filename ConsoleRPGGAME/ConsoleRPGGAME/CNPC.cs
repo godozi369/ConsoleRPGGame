@@ -59,15 +59,24 @@ namespace Game.NPC
         private List<CItem> ShopList = new List<CItem>();
         public CShop()
         {
-            ShopList.Add(new Weapon("무기", "녹슨 단검", "공격력", 10, 100, 1));
-            ShopList.Add(new Weapon("무기", "쪼개진 망치", "공격력", 15, 150, 1));
-            ShopList.Add(new Weapon("무기", "나무 활", "공격력", 12, 120, 1));
-            ShopList.Add(new Armor("방어구", "가죽 아머", "방어력", 3, 90, 1));
-            ShopList.Add(new Armor("방어구", "천 아머", "방어력", 2, 60, 1));
-            ShopList.Add(new Armor("방어구", "금이 간 강철 아머", "방어력", 6, 180, 1));
-            ShopList.Add(new Potion("포션", "냄새나는 포션", "체력 회복", 10, 10, 1));
-            ShopList.Add(new Potion("포션", "탁한 포션", "체력 회복", 30, 30, 1));
-            ShopList.Add(new Potion("포션", "바카스", "응가누", 3, 15, 1));            
+            ShopList.Add(new Tool("도구", "허름한 낚시대", "느림", 15, 100, 0));
+            ShopList.Add(new Tool("도구", "평범한 낚시대", "일반", 30, 300, 0));
+            ShopList.Add(new Tool("도구", "고급 낚시대", "빠름", 60, 600, 0));
+            ShopList.Add(new Tool("도구", "금간 도끼", "느림", 15, 100, 0));
+            ShopList.Add(new Tool("도구", "평범한 도끼", "일반", 30, 300, 0));
+            ShopList.Add(new Tool("도구", "고급 도끼", "빠름", 60, 600, 0));
+            ShopList.Add(new Tool("도구", "녹슨 곡괭이", "느림", 12, 120, 0));
+            ShopList.Add(new Tool("도구", "평범한 곡괭이", "일반", 24, 240, 0));
+            ShopList.Add(new Tool("도구", "고급 곡괭이", "빠름", 48, 480, 0));
+            ShopList.Add(new Tool("도구", "낡은 가위", "느림", 12, 120, 0));
+            ShopList.Add(new Tool("도구", "평범한 가위", "일반", 24, 240, 0));
+            ShopList.Add(new Tool("도구", "고급 가위", "빠름", 48, 480, 0));
+            ShopList.Add(new Cloth("옷", "가죽 자켓", "활력", 3, 30, 0));
+            ShopList.Add(new Cloth("옷", "평범한 작업복", "활력", 6, 60, 0));
+            ShopList.Add(new Cloth("옷", "고급 작업복", "활력", 18, 180, 0));
+            ShopList.Add(new Potion("포션", "냄새나는 포션", "체력 회복", 10, 10, 0));
+            ShopList.Add(new Potion("포션", "탁한 포션", "체력 회복", 30, 30, 0));
+            ShopList.Add(new Potion("포션", "바카스", "응가누", 3, 15, 0));
         }
         
         public void ShowCategory(ItemCategory category, CPlayer player)
@@ -100,7 +109,7 @@ namespace Game.NPC
                 if (choice == 0)
                 {
                     Console.WriteLine("이전으로 돌아갑니다");
-                    Console.ReadKey(true);
+                    Thread.Sleep(1000);
                     Helper.ClearFromLine(15);
                     Console.SetCursorPosition(0, 15);
                     return;
@@ -151,8 +160,8 @@ namespace Game.NPC
 
                 switch (key.Key)
                 {
-                    case ConsoleKey.D1: ShowCategory(ItemCategory.Weapon, player); return;
-                    case ConsoleKey.D2: ShowCategory(ItemCategory.Armor, player); return;
+                    case ConsoleKey.D1: ShowCategory(ItemCategory.Tool, player); return;
+                    case ConsoleKey.D2: ShowCategory(ItemCategory.Cloth, player); return;
                     case ConsoleKey.D3: ShowCategory(ItemCategory.Potion, player); return;
                     case ConsoleKey.D4: ShowSellMenu(player); return;
                     default: Console.WriteLine("뭐하는짓이야!"); break;

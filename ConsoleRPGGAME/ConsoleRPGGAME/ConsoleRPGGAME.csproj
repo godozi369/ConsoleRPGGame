@@ -8,10 +8,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="MUSIC\fish.mp3" />
+    <None Remove="MUSIC\logging.mp3" />
+    <None Remove="MUSIC\mining.mp3" />
+    <None Remove="MUSIC\scissor.mp3" />
     <None Remove="MUSIC\君連れ去りし春.mp3" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="MUSIC\logging.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="MUSIC\fish.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MUSIC\mining.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MUSIC\scissor.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="MUSIC\君連れ去りし春.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

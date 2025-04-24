@@ -69,7 +69,14 @@ namespace Game.Inventory
         }
         public void RemoveItem(CItem item)
         {
-            InvenList.Remove(item);
+            if (item.quantity > 1)
+            {
+                item.quantity--;
+            }
+            else
+            {
+                InvenList.Remove(item);
+            }
         }
         public CItem GetItemByIndex(int index)
         {

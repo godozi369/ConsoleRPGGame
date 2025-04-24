@@ -23,7 +23,7 @@ namespace Program
             Console.CursorVisible = false;  // 커서 숨기기
 
             CInventory Inven = new CInventory();
-            CPlayer player = new CPlayer("까비", 1, 300, 15, 0, 0, 150, Inven);
+            CPlayer player = new CPlayer("까비", 1, 300, 15, 0, 0, 10000, Inven);
 
             CGameManager gameManager = new CGameManager();          
             gameManager.Initialize();   // 맵 생성

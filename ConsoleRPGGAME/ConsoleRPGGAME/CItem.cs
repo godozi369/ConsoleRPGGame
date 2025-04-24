@@ -2,7 +2,7 @@
 
 namespace Game.Item
 {
-    public enum ItemCategory { Weapon, Armor, Potion, Fragment }
+    public enum ItemCategory { Tool, Cloth, Potion, Fragment }
     public class CItem
     {
         public string type { get; }
@@ -10,7 +10,7 @@ namespace Game.Item
         public int abil { get; }
         public int price { get; }
         public string info { get; }
-        public int quantity { get; set; } 
+        public int quantity { get; set; }
         public ItemCategory category { get; }
 
         public CItem(string type, string name, int abil, int price, string info, ItemCategory category, int quantity)
@@ -29,35 +29,53 @@ namespace Game.Item
         private List<CItem> itemList = new List<CItem>();
         public CItem()
         {
-            itemList.Add(new Weapon("무기", "녹슨 단검", "공격력", 10, 100, 0));
-            itemList.Add(new Weapon("무기", "쪼개진 망치", "공격력", 15, 150, 0));
-            itemList.Add(new Weapon("무기", "나무 활", "공격력", 12, 120, 0));
-            itemList.Add(new Armor("방어구", "가죽 아머", "방어력", 3, 90, 0));
-            itemList.Add(new Armor("방어구", "천 아머", "방어력", 2, 60, 0));
-            itemList.Add(new Armor("방어구", "금이 간 강철 아머", "방어력", 6, 180, 0));
+            itemList.Add(new Tool("도구", "허름한 낚시대", "느림", 15, 100, 0));
+            itemList.Add(new Tool("도구", "평범한 낚시대", "일반", 30, 300, 0));
+            itemList.Add(new Tool("도구", "고급 낚시대", "빠름", 60, 600, 0));
+            itemList.Add(new Tool("도구", "금간 도끼", "느림", 15, 100, 0));
+            itemList.Add(new Tool("도구", "평범한 도끼", "일반", 30, 300, 0));
+            itemList.Add(new Tool("도구", "고급 도끼", "빠름", 60, 600, 0));
+            itemList.Add(new Tool("도구", "녹슨 곡괭이", "느림", 12, 120, 0));
+            itemList.Add(new Tool("도구", "평범한 곡괭이", "일반", 24, 240, 0));
+            itemList.Add(new Tool("도구", "고급 곡괭이", "빠름", 48, 480, 0));
+            itemList.Add(new Tool("도구", "낡은 가위", "느림", 12, 120, 0));
+            itemList.Add(new Tool("도구", "평범한 가위", "일반", 24, 240, 0));
+            itemList.Add(new Tool("도구", "고급 가위", "빠름", 48, 480, 0));
+            itemList.Add(new Cloth("옷", "가죽 자켓", "활력", 3, 30, 0));
+            itemList.Add(new Cloth("옷", "평범한 작업복", "활력", 6, 60, 0));
+            itemList.Add(new Cloth("옷", "고급 작업복", "활력", 18, 180, 0));
             itemList.Add(new Potion("포션", "냄새나는 포션", "체력 회복", 10, 10, 0));
             itemList.Add(new Potion("포션", "탁한 포션", "체력 회복", 30, 30, 0));
             itemList.Add(new Potion("포션", "바카스", "응가누", 3, 15, 0));
-            itemList.Add(new Fragment("파편", "늑대 영혼 파편", "늑대의 영혼이 담겨있다", 1, 1, 0));
-            itemList.Add(new Fragment("파편", "웨어울프 영혼 파편", "늑대의 영혼이 담겨있다", 12, 12, 0));
-            itemList.Add(new Fragment("파편", "원숭이 영혼 파편", "원숭이의 영혼이 담겨있다", 1, 1, 0));
-            itemList.Add(new Fragment("파편", "몽키킹 영혼 파편", "원숭이의 영혼이 담겨있다", 15, 15, 0));            
+            itemList.Add(new Potion("약초", "회복초", "HP 15 회복", 15, 15, 0));
+            itemList.Add(new Potion("약초", "독초", "조심해야 할 독성 약초", -10, 15, 0));
+            itemList.Add(new Potion("약초", "마법초", "신비한 힘이 느껴지는 약초", 33, 33, 0));
+            itemList.Add(new Fragment("물고기", "못생긴 붕어", "체력 회복", 10, 10, 0));
+            itemList.Add(new Fragment("물고기", "썩은 숭어", "체력 회복", 20, 20, 0));
+            itemList.Add(new Fragment("물고기", "냄새나는 메기", "체력 회복", 30, 30, 0));
+            itemList.Add(new Fragment("물고기", "통조림 통", "썩은내가 난다", 0, 0, 0));
+            itemList.Add(new Fragment("재료", "나무 조각", "기본 제작 재료", 1, 5, 0));
+            itemList.Add(new Fragment("재료", "사과", "HP 10 회복", 10, 10, 0));
+            itemList.Add(new Fragment("아이템", "빛나는 잎", "HP 333 회복", 333, 333, 0));
+            itemList.Add(new Fragment("광석", "돌덩이", "단단해보이는 돌덩이", 1, 15, 0));
+            itemList.Add(new Fragment("광석", "철광석", "은은한 빛이 돈다", 3, 30, 0));
+            itemList.Add(new Fragment("광석", "금광석", "금빛이 강렬하다", 9, 90, 0));
         }
     }
 
-    public class Weapon : CItem
+    public class Tool : CItem
     {
-        public Weapon(string type, string name, string info, int abil, int price, int quantity) : base(type, name, abil, price, info, ItemCategory.Weapon, quantity) { }
+        public Tool(string type, string name, string info, int abil, int price, int quantity) : base(type, name, abil, price, info, ItemCategory.Tool, quantity) { }
 
         public override void ShowInfo()
         {
             Console.WriteLine($"[{type}] {name} | {info} : {abil} | 가격 : {price} ");
-        }
+        }      
     }
 
-    public class Armor : CItem
+    public class Cloth : CItem
     {
-        public Armor(string type, string name, string info, int abil, int price, int quantity) : base(type, name, abil, price, info, ItemCategory.Armor, quantity) { }
+        public Cloth(string type, string name, string info, int abil, int price, int quantity) : base(type, name, abil, price, info, ItemCategory.Cloth, quantity) { }
 
         public override void ShowInfo()
         {
@@ -73,7 +91,7 @@ namespace Game.Item
         {
             Console.WriteLine($"[{type}] {name} | {info} : {abil} | 가격 : {price}");
         }
-    }  
+    }
     class Fragment : CItem
     {
         public Fragment(string type, string name, string info, int abil, int price, int quantity) : base(type, name, abil, price, info, ItemCategory.Fragment, quantity) { }
@@ -82,6 +100,8 @@ namespace Game.Item
         {
             Console.WriteLine($"[{type}] {name} | {info} | {abil} 가격 : {price}");
         }
+    
     }
-
+    
 }
+     
