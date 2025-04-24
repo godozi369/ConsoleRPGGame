@@ -50,10 +50,10 @@ namespace Game.Item
             itemList.Add(new Potion("약초", "회복초", "HP 15 회복", 15, 15, 0));
             itemList.Add(new Potion("약초", "독초", "조심해야 할 독성 약초", -10, 15, 0));
             itemList.Add(new Potion("약초", "마법초", "신비한 힘이 느껴지는 약초", 33, 33, 0));
-            itemList.Add(new Fragment("물고기", "못생긴 붕어", "체력 회복", 10, 10, 0));
-            itemList.Add(new Fragment("물고기", "썩은 숭어", "체력 회복", 20, 20, 0));
-            itemList.Add(new Fragment("물고기", "냄새나는 메기", "체력 회복", 30, 30, 0));
-            itemList.Add(new Fragment("물고기", "통조림 통", "썩은내가 난다", 0, 0, 0));
+            itemList.Add(new Potion("물고기", "못생긴 붕어", "체력 회복", 10, 10, 0));
+            itemList.Add(new Potion("물고기", "썩은 숭어", "체력 회복", 20, 20, 0));
+            itemList.Add(new Potion("물고기", "냄새나는 메기", "체력 회복", 30, 30, 0));
+            itemList.Add(new Potion("물고기", "통조림 통", "썩은내가 난다", 0, 0, 0));
             itemList.Add(new Fragment("재료", "나무 조각", "기본 제작 재료", 1, 5, 0));
             itemList.Add(new Fragment("재료", "사과", "HP 10 회복", 10, 10, 0));
             itemList.Add(new Fragment("아이템", "빛나는 잎", "HP 333 회복", 333, 333, 0));

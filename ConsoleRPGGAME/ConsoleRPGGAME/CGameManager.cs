@@ -219,7 +219,7 @@ namespace Game.GameManager
                     Console.WriteLine("게임 오버");
                     Environment.Exit(0);
                 }
-                Thread.Sleep(1000);
+                Thread.Sleep(1500);
                 Console.Clear();
                 bgm.Stop();
             
@@ -323,30 +323,28 @@ namespace Game.GameManager
                         {
                             bgm.Play("MUSIC/logging.mp3");
                             new LoggingScene().Load(null);
-                            bgm.Stop();
                         }
                         else if (player.CurrentMode == ActivityMode.채집모드)
                         {
                             bgm.Play("MUSIC/scissor.mp3");
                             new CollectingScene().Load(null);
-                            bgm.Stop();
                         }
                         else if (player.CurrentMode == ActivityMode.채광모드)
                         {
                             bgm.Play("MUSIC/mining.mp3");
                             new MiningScene().Load(null);
-                            bgm.Stop();
                         }
 
                             // 도구별 딜레이설정
                             int delay = GetDelayByToolName(player.EquipTool.name);
                         Console.WriteLine($"\n[{selected.Name}] 채집 중(체력 - 10)");
-                        for (int i = 0; i < delay / 500; i++)
+                        for (int i = 0; i < delay / 300; i++)
                         {
                             Console.Write(".");
-                            Thread.Sleep(500);
+                            Thread.Sleep(300);
                         }
                         Thread.Sleep(delay);
+                        bgm.Stop();
 
                         player.Hp -= 10;
 

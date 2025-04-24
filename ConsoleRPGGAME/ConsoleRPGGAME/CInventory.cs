@@ -47,34 +47,45 @@ namespace Game.Inventory
                 item.quantity = 1;
                 InvenList.Add(item);
             }
-        }      
+        }
         public void UseItem(int index, CPlayer player)
         {
-            if (index >= 1 && index <= InvenList.Count)
-            {
-                CItem item = InvenList[index - 1];
+            int actualIndex = index - 1;
 
-                Console.SetCursorPosition(0, 15);
-                if (item.category == ItemCategory.Potion)
-                {
-                    player.Hp += item.abil;
-                    Console.WriteLine($"{player.Name}의 체력이 {item.abil}만큼 회복되었습니다!");
-                }
-                else
-                {
-                    player.EquipItem(item);
-                    Console.WriteLine($"{item.name}을 장착했습니다!");
-                }
-                item.quantity--;
-                if (item.quantity <= 0)
-                {
-                    InvenList.RemoveAt(index-1);
-                }
+            if (actualIndex < 0 || actualIndex >= InvenList.Count)
+            {
+                Console.WriteLine("해당 번호의 아이템이 없습니다.");
+                Thread.Sleep(1000);
+                Helper.ClearFromLine(15);
+                return;
+            }
+
+            CItem item = InvenList[actualIndex];
+
+            if (item.category == ItemCategory.Potion)
+            {
+                player.Hp += item.abil;
+                Console.SetCursorPosition(0, 21);
+                Console.WriteLine($"{player.Name}의 체력이 {item.abil}만큼 회복되었습니다!");
             }
             else
             {
-                Console.WriteLine("해당 번호의 아이템이 없습니다.");
+                player.EquipItem(item);
+                Console.SetCursorPosition(0, 21);
+                Console.WriteLine($"{item.name}를 장착했습니다!");
             }
+
+            item.quantity--;
+            if (item.quantity <= 0)
+            {
+                // 리스트 내부에 여전히 해당 item이 있는지 확인
+                int indexInList = InvenList.IndexOf(item);
+                if (indexInList >= 0)
+                {
+                    InvenList.RemoveAt(indexInList);
+                }
+            }
+
             Thread.Sleep(1000);
             Helper.ClearFromLine(15);
         }
@@ -89,13 +100,12 @@ namespace Game.Inventory
                 InvenList.Remove(item);
             }
         }
-        public CItem GetItemByIndex(int index)
+        public CItem? GetItemByIndex(int index)
         {
-            if (index > 0 && index <= InvenList.Count)
-            {
-                return InvenList[index - 1];
-            }
-            else { return null; }
+            int actualIndex = index - 1;
+            if (actualIndex >= 0 && actualIndex < InvenList.Count)
+                return InvenList[actualIndex];
+            return null;
         }
     }
 }
