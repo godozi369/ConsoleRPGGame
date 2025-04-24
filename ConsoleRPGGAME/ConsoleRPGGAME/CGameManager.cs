@@ -67,7 +67,7 @@ namespace Game.GameManager
         }
 
 
-        public void playerAction(ConsoleKey key)
+        public void playerAction(ConsoleKey key, SceneManager manager)
         {
             CMap currentMap = _stages[_currentStage];
 
@@ -94,7 +94,7 @@ namespace Game.GameManager
             _playerY = nextY;
 
             // 행동 작용 메서드
-            TryFieldInteraction(_player);
+            TryFieldInteraction(_player, manager);
 
             // 포탈 타일 위에 잇으면 맵 이동 
             if (currentMap._tile[_playerY, _playerX] == CMap.TileType.portal)
@@ -274,19 +274,12 @@ namespace Game.GameManager
                 _ => rand.Next(1200, 1800)
             };
         }   
-        public void TryFieldInteraction(CPlayer player)
+        public void TryFieldInteraction(CPlayer player, SceneManager manager)
         {           
 
 
             if (player.CurrentMode == ActivityMode.백수모드)
-                return;
-            if (player.CurrentMode == ActivityMode.낚시모드)
-            {
-                if (IsNearRiver(GetCurrentMap(), _playerX, _playerY))
-                {
-                    TryFishing(player);
-                }
-            }
+                return;           
           
             if (rand.Next(100) < 15) 
             {

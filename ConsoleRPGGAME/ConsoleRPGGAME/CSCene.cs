@@ -179,7 +179,7 @@ namespace Game.Scene
                         }
                         else if (_gameManager.IsNearRiver(currentMap, _gameManager.PlayerX, _gameManager.PlayerY) && _gameManager.Player.CurrentMode == ActivityMode.낚시모드)
                         {
-                            _gameManager.TryFishing(_gameManager.Player);
+                            _gameManager.TryFishing(_gameManager.Player, manager);
                         }
                         break;
 
@@ -187,7 +187,7 @@ namespace Game.Scene
                     case ConsoleKey.RightArrow:
                     case ConsoleKey.UpArrow:
                     case ConsoleKey.DownArrow:
-                        _gameManager.playerAction(key.Key);
+                        _gameManager.playerAction(key.Key, manager);
                         break;
                     case ConsoleKey.W:
                         manager.ChangeScene(SceneType.Inventory);
