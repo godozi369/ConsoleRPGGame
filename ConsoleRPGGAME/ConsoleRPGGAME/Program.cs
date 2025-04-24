@@ -32,9 +32,12 @@ namespace Program
             // 씬 추가  ( 삭제 ) 
             SceneManager sceneManager = new SceneManager();
             sceneManager.Register(SceneType.Game, new GameScene(gameManager, player));
-            sceneManager.Register(SceneType.Inventory, new InventoryScene(player));           
+            sceneManager.Register(SceneType.Inventory, new InventoryScene(player, gameManager));                 
+            sceneManager.Register(SceneType.Intro, new IntroScene(player, gameManager));           
             
             // 기본 씬 설정
+            sceneManager.ChangeScene(SceneType.Intro);
+            Console.Clear();
             sceneManager.ChangeScene(SceneType.Game);
 
 

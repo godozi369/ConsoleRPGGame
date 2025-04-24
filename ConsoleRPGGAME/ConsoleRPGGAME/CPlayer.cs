@@ -54,15 +54,16 @@ namespace Game.Player
             {
                 Helper.ClearFromLine(13);
                 Console.SetCursorPosition(85, 13);
-                Console.WriteLine($"[장착중인 도구] {EquipTool.name}");
+                Console.WriteLine($"[장착중인 도구] {EquipTool.name ?? "이름 없음"}");
                 Console.SetCursorPosition(85, 14);
-                Console.WriteLine($"[효과] {EquipTool.info}");
-            }
+                Console.WriteLine($"[효과] {EquipTool.info ?? "정보없음"}");
+            }          
             if (EquipCloth != null)
             {
                 Console.SetCursorPosition(85, 15);
-                Console.WriteLine($"[장착중인 옷] {EquipCloth.name} (+{EquipCloth.abil}) ");
-            }
+                Console.WriteLine($"[장착중인 옷] {EquipCloth.name ?? "이름 없음"}");
+            }         
+
         }
 
         // 장비 장착

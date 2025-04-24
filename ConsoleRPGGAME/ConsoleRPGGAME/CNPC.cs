@@ -21,17 +21,20 @@ namespace Game.NPC
             X = x;
             Y = y;
         }
-        public abstract void Interact(CPlayer player);              
+        public abstract void Interact(CPlayer player);
+        
     }
-    // 1. 행상인npc
+
     public class NPC1 : CNPC
     {
         private CShop shop;
-        public NPC1(string name, int x, int y, CShop shop) : base(name, x, y) { this.shop = shop; } 
-        
+        public NPC1(int x, int y) : base("무인도 한달 선배", x, y)
+        {
+            this.shop = ShopData.Shop1;
+        }
+
         public override void Interact(CPlayer player)
         {
-            // 널 오류 방어
             if (shop == null)
             {
                 Console.WriteLine("[에러] 상점 객체가 null입니다");
@@ -39,44 +42,141 @@ namespace Game.NPC
             }
 
             Console.SetCursorPosition(0, 15);
-            Console.WriteLine($"[{Name}] 안녕하신가! 모험가여! 혹시 필요한건 없는가?");
+            Console.WriteLine($"[{Name}] 안녕하신가! 자네 도구가 좀 필요해보이는군!");
             Console.WriteLine($"[{player.Name}] 필요한게있는지 구경해보겠습니다(Y)");
             Console.WriteLine($"[{player.Name}] 다음에 오겠습니다 ㅎㅎ(N)");
+            
             while (true)
             {
                 var key = Console.ReadKey();
                 switch (key.Key)
-                {                   
+                {
                     case ConsoleKey.Y: shop.ShowShop(player); return;
-                    case ConsoleKey.N: Console.WriteLine($"[{Name}] 다음은 없을지도 몰라! "); return;
-                    default: Console.WriteLine($"[{Name}] 뭐하는겐가! 대답을 하라구!"); break;                    
+                    case ConsoleKey.N: Console.WriteLine($"[{Name}] 다음은 없을지도 몰라! ");
+                        Thread.Sleep(1000);
+                        Helper.ClearFromLine(15);
+                        return;
+                    default: 
+                        Console.WriteLine($"[{Name}] 여기서 시간은 생명이라네!!!"); break;                
                 }
-            }            
+            }
         }
     }
-    public class CShop
+
+    public class NPC2 : CNPC
     {
-        private List<CItem> ShopList = new List<CItem>();
-        public CShop()
+        private CShop shop;
+        public NPC2(int x, int y) : base("무인도 중수", x, y)
         {
-            ShopList.Add(new Tool("도구", "허름한 낚시대", "느림", 15, 100, 0));
-            ShopList.Add(new Tool("도구", "평범한 낚시대", "일반", 30, 300, 0));
-            ShopList.Add(new Tool("도구", "고급 낚시대", "빠름", 60, 600, 0));
-            ShopList.Add(new Tool("도구", "금간 도끼", "느림", 15, 100, 0));
-            ShopList.Add(new Tool("도구", "평범한 도끼", "일반", 30, 300, 0));
-            ShopList.Add(new Tool("도구", "고급 도끼", "빠름", 60, 600, 0));
-            ShopList.Add(new Tool("도구", "녹슨 곡괭이", "느림", 12, 120, 0));
-            ShopList.Add(new Tool("도구", "평범한 곡괭이", "일반", 24, 240, 0));
-            ShopList.Add(new Tool("도구", "고급 곡괭이", "빠름", 48, 480, 0));
-            ShopList.Add(new Tool("도구", "낡은 가위", "느림", 12, 120, 0));
-            ShopList.Add(new Tool("도구", "평범한 가위", "일반", 24, 240, 0));
-            ShopList.Add(new Tool("도구", "고급 가위", "빠름", 48, 480, 0));
-            ShopList.Add(new Cloth("옷", "가죽 자켓", "활력", 3, 30, 0));
-            ShopList.Add(new Cloth("옷", "평범한 작업복", "활력", 6, 60, 0));
-            ShopList.Add(new Cloth("옷", "고급 작업복", "활력", 18, 180, 0));
-            ShopList.Add(new Potion("포션", "냄새나는 포션", "체력 회복", 10, 10, 0));
-            ShopList.Add(new Potion("포션", "탁한 포션", "체력 회복", 30, 30, 0));
-            ShopList.Add(new Potion("포션", "바카스", "응가누", 3, 15, 0));
+            this.shop = ShopData.Shop2;
+        }
+
+        public override void Interact(CPlayer player)
+        {
+            if (shop == null)
+            {
+                Console.WriteLine("[에러] 상점 객체가 null입니다");
+                return;
+            }
+
+            Console.SetCursorPosition(0, 15);
+            Console.WriteLine($"[{Name}] 안녕하신가! 혹시 필요한건 없는가?");
+            Console.WriteLine($"[{player.Name}] 필요한게있는지 구경해보겠습니다(Y)");
+            Console.WriteLine($"[{player.Name}] 다음에 오겠습니다 ㅎㅎ(N)");
+
+            while (true)
+            {
+                var key = Console.ReadKey();
+                switch (key.Key)
+                {
+                    case ConsoleKey.Y: shop.ShowShop(player); return;
+                    case ConsoleKey.N: Console.WriteLine($"[{Name}] 다음은 없을지도 몰라! ");
+                        Thread.Sleep(1000);
+                        Helper.ClearFromLine(15);
+                        return;
+                    default: Console.WriteLine($"[{Name}] 여기서 시간은 생명이라네!!!"); break;
+                }
+            }
+        }
+
+    }
+
+    public class NPC3 : CNPC
+    {
+        private CShop shop;
+        public NPC3(int x, int y) : base("무인도 장인", x, y)
+        {
+            this.shop = ShopData.Shop3;
+        }
+
+        public override void Interact(CPlayer player)
+        {
+            if (shop == null)
+            {
+                Console.WriteLine("[에러] 상점 객체가 null입니다");
+                return;
+            }
+
+            Console.SetCursorPosition(0, 15);
+            Console.WriteLine($"[{Name}] 이곳 최고의 것들은 전부 나에게 있네");
+            Console.WriteLine($"[{player.Name}] 오 한번 둘러보겠습니다(Y)");
+            Console.WriteLine($"[{player.Name}] 다음에 오겠습니다 ㅎㅎ(N)");
+            
+            while (true)
+            {
+                var key = Console.ReadKey();
+                switch (key.Key)
+                {
+                    case ConsoleKey.Y: shop.ShowShop(player); return;
+                    case ConsoleKey.N: Console.WriteLine($"[{Name}] 더 성장해서 오게");
+                        Thread.Sleep(1000);
+                        Helper.ClearFromLine(15);
+                        return;
+                    default: Console.WriteLine($"[{Name}] 시간은 생명이야!"); break;
+                }
+            }
+            
+        }
+    }
+
+    public class ShopData
+    {
+         public static CShop Shop1 => new CShop(new List<CItem>
+         {
+             new Tool("도구", "허름한 낚시대", "느림", 15, 100, 0),
+             new Tool("도구", "금간 도끼", "느림", 15, 100, 0),
+             new Tool("도구", "녹슨 곡괭이", "느림", 12, 120, 0),
+             new Tool("도구", "낡은 가위", "느림", 12, 120, 0),
+             new Cloth("옷", "가죽 자켓", "활력", 3, 30, 0),
+             new Potion("포션", "냄새나는 포션", "체력 회복", 10, 10, 0)
+         });
+
+         public static CShop Shop2 => new CShop(new List<CItem>
+         {
+             new Tool("도구", "평범한 낚시대", "일반", 30, 300, 0),
+             new Tool("도구", "평범한 곡괭이", "일반", 24, 240, 0),
+             new Tool("도구", "평범한 도끼", "일반", 30, 300, 0),
+             new Tool("도구", "평범한 가위", "일반", 24, 240, 0),
+             new Cloth("옷", "평범한 작업복", "활력", 6, 60, 0),
+             new Potion("포션", "탁한 포션", "체력 회복", 30, 30, 0)
+         });
+
+         public static CShop Shop3 => new CShop(new List<CItem>
+         {
+             new Tool("도구", "고급 낚시대", "빠름", 60, 600, 0),
+             new Tool("도구", "고급 곡괭이", "빠름", 48, 480, 0),
+             new Tool("도구", "고급 도끼", "빠름", 60, 600, 0),
+             new Tool("도구", "고급 가위", "빠름", 48, 480, 0),
+             new Cloth("옷", "고급 작업복", "활력", 18, 180, 0),
+             new Potion("포션", "바카스", "응가누", 3, 15, 0),
+         });
+    }
+    public class CShop 
+    {
+        private List<CItem> ShopList;
+        public CShop(List<CItem> items)
+        {
+            ShopList = items;         
         }
         
         public void ShowCategory(ItemCategory category, CPlayer player)

@@ -1,7 +1,6 @@
-﻿using Game.Battle;
+﻿
 using Game.Inventory;
 using Game.Map;
-using Game.Monster;
 using Game.NPC;
 using Game.Player;
 using Game.Item;
@@ -12,6 +11,7 @@ using Game.Collect;
 using System.Runtime.CompilerServices;
 using Game.Scene;
 using Game.Audio;
+using System.Runtime.ConstrainedExecution;
 
 namespace Game.GameManager
 {  
@@ -29,30 +29,31 @@ namespace Game.GameManager
         public CMap GetCurrentMap() => _stages[_currentStage];
         public void Initialize()
         {
-            CShop shop = new CShop();
-
+            
             // 스테이지 1 
             CMap map1_1 = new CMap();
+            map1_1.AddNPC(new NPC1(10, 5));
             map1_1.Initialize(12);
             map1_1.SetPortal(10, 10);
-            map1_1.SetName("울창한 숲 1");
+            map1_1.SetName("무인도 1");
             _stages.Add(map1_1);
 
             // 스테이지 2
             CMap map1_2 = new CMap();
-            map1_2.Initialize(12);
-            map1_1.AddNPC(new NPC1("늙은 상인", 10, 5, shop));
+            map1_2.AddNPC(new NPC2(5, 8));
+            map1_2.Initialize(12);           
             map1_2.SetPortal(1, 1);
             map1_2.SetPortal(10, 10);
-            map1_2.SetName("울창한 숲 2"); 
+            map1_2.SetName("무인도 2"); 
             _stages.Add(map1_2);
 
             // 스테이지 3 
             CMap map1_3 = new CMap();
+            map1_3.AddNPC(new NPC3(8, 8));
             map1_3.Initialize(12);
             map1_3.SetPortal(1, 1);
             map1_3.SetPortal(10, 10);
-            map1_3.SetName("울창한 숲 3"); 
+            map1_3.SetName("무인도 3"); 
             _stages.Add(map1_3);
         }
         public void RenderMap()
@@ -137,85 +138,95 @@ namespace Game.GameManager
         }
 
         private bool isFishing = false;
-        public void TryFishing(CPlayer player)
+        public void TryFishing(CPlayer player, SceneManager manager)
         {
             if (isFishing) return;         
             isFishing = true;
-
-            Console.SetCursorPosition(0, 15);
-            if (player.EquipTool == null || !player.EquipTool.name.Contains("낚시대"))
+            try
             {
-                Console.WriteLine("[낚시 실패] 낚시대를 장착해야 낚시할 수 있습니다!");
-                Thread.Sleep(1000);
-                Helper.ClearFromLine(15);
-                return;
-            }
 
-            BgmPlayer bgm = new BgmPlayer();
-            bgm.Play("MUSIC/fish.mp3");
-            var scene = new FishingScene();
-            scene.Load(null);
-            Console.SetCursorPosition(0, 15);
-            Console.Write("낚시를 시도합니다...");
-            int delay = GetDelayByToolName(player.EquipTool.name);
-            for (int i = 0; i < delay / 300; i++)
-            {
-                Console.Write(".");
-                Thread.Sleep(300);
-            }
-            Thread.Sleep(delay);
-            Console.WriteLine("\n오! 반응이 온다!");
-            Thread.Sleep(1000);
-
-            
-            if (rand.Next(0, 100) < 50)
-            {
-                CItem fish = null;
-                int exp = 0;
-
-                switch (_currentStage)
+                Console.SetCursorPosition(0, 15);
+                if (player.EquipTool == null || !player.EquipTool.name.Contains("낚시대"))
                 {
-                    case 0:
-                        fish = new Fragment("물고기", "못생긴 붕어", "체력 회복", 10, 10, 1);
-                        exp = 5;
-                        break;
-                    case 1:
-                        fish = new Fragment("물고기", "썩은 숭어", "체력 회복", 20, 20, 1);
-                        exp = 10;
-                        break;
-                    case 2:
-                        fish = new Fragment("물고기", "냄새나는 메기", "체력회복", 30, 30, 1);
-                        exp = 15;
-                        break;
-                    default:
-                        fish = new Fragment("물고기", "통조림 통", "썩은내가 난다", 0, 0, 1);
-                        exp = 1;
-                        break;
+                    Console.WriteLine("[낚시 실패] 낚시대를 장착해야 낚시할 수 있습니다!");
+                    Thread.Sleep(1000);
+                    Helper.ClearFromLine(15);
+                    return;
                 }
 
-                player.Inventory.AddItem(fish);
-                Console.WriteLine($"[낚시 성공!] {fish.name}을 잡았습니다!!!");
+                BgmPlayer bgm = new BgmPlayer();
+                bgm.Play("MUSIC/fish.mp3");
 
-                player.GetExp(exp);
-                Console.WriteLine($"[경험치] {exp} EXP를 획득했습니다!");
-            }
-            else
-            {
-                Console.WriteLine("아무것도 잡히지 않았습니다 ㅠ"); 
-            }
-            Console.WriteLine($"스트레스로 체력 10을 잃었습니다");
-            player.Hp -= 10;
-            if (player.Hp <= 0)
-            {
+                var scene = new FishingScene();
+                scene.Load(manager);
+
+                Console.SetCursorPosition(0, 15);
+                Console.Write("낚시를 시도합니다...");
+                int delay = GetDelayByToolName(player.EquipTool.name);
+
+                for (int i = 0; i < delay / 300; i++)
+                {
+                    Console.Write(".");
+                    Thread.Sleep(300);
+                }
+                Thread.Sleep(delay);
+                Console.WriteLine("\n오! 반응이 온다!");
+                Thread.Sleep(1000);
+
+                
+                if (rand.Next(0, 100) < 50)
+                {
+                    CItem fish = null;
+                    int exp = 0;
+
+                    switch (_currentStage)
+                    {
+                        case 0:
+                            fish = new Fragment("물고기", "못생긴 붕어", "체력 회복", 10, 10, 1);
+                            exp = 5;
+                            break;
+                        case 1:
+                            fish = new Fragment("물고기", "썩은 숭어", "체력 회복", 20, 20, 1);
+                            exp = 10;
+                            break;
+                        case 2:
+                            fish = new Fragment("물고기", "냄새나는 메기", "체력회복", 30, 30, 1);
+                            exp = 15;
+                            break;
+                        default:
+                            fish = new Fragment("물고기", "통조림 통", "썩은내가 난다", 0, 0, 1);
+                            exp = 1;
+                            break;
+                    }
+
+                    player.Inventory.AddItem(fish);
+                    Console.WriteLine($"[낚시 성공!] {fish.name}을 잡았습니다!!!");
+
+                    player.GetExp(exp);
+                    Console.WriteLine($"[경험치] {exp} EXP를 획득했습니다!");
+                }
+                else
+                {
+                    Console.WriteLine("아무것도 잡히지 않았습니다 ㅠ"); 
+                }
+                Console.WriteLine($"스트레스로 체력 10을 잃었습니다");
+                player.Hp -= 10;
+                if (player.Hp <= 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine("당신은 체력이 다해 쓰러졌습니다...");
+                    Console.WriteLine("게임 오버");
+                    Environment.Exit(0);
+                }
+                Thread.Sleep(1000);
                 Console.Clear();
-                Console.WriteLine("당신은 체력이 다해 쓰러졌습니다...");
-                Console.WriteLine("게임 오버");
-                Environment.Exit(0);
+                bgm.Stop();
+            
             }
-            isFishing = false;           
-            bgm.Stop();
-            Thread.Sleep(1000);
-            Console.Clear();
+            finally
+            {
+                isFishing = false;                           
+            }
         }
         public void SelectMode(CPlayer player)
         {
@@ -239,11 +250,10 @@ namespace Game.GameManager
                 default: return;
                 
             }
-
             Console.WriteLine("계속하려면 아무 키나 눌러,,,");
             Console.ReadKey();
-            Thread.Sleep(300);
-            
+            Thread.Sleep(300);           
+            Helper.ClearFromLine(15);
         }
         public int GetDelayByToolName(string toolName)
         {

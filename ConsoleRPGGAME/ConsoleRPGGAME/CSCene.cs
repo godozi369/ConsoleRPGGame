@@ -6,17 +6,15 @@ using Game.Map;
 using static System.Net.Mime.MediaTypeNames;
 using Game.Util;
 using Game.Audio;
+using static Game.Player.CPlayer;
 
 namespace Game.Scene
 {
     public enum SceneType
     {
-        Action,
+        Intro,
         Game,
         Inventory,
-        Battle,
-        NPC,
-        PlayerStatus
     }
     public abstract class Scene
     {
@@ -50,16 +48,62 @@ namespace Game.Scene
             : null;
     }
     #endregion
+    #region 인트로 씬
+    public class IntroScene : Scene
+    {
+        private CPlayer _player;
+        private CGameManager _gameManager;
+        public IntroScene(CPlayer player, CGameManager gameManager)
+        {
+            _player = player;
+            _gameManager = gameManager;
+        }
+        
+        public override void Load(SceneManager manager)
+        {
+
+            string[] logo = new string[]
+            {
+                "",
+                "",
+                "",
+                "",
+                "███╗   ███╗██╗   ██╗██╗███╗   ██╗██████╗  ██████╗  ",
+                "████╗ ████║██║   ██║██║████╗  ██║██╔══██╗██╔═══██╗ ",
+                "██╔████╔██║██║   ██║██║██╔██╗ ██║██║  ██║██║   ██║ ",
+                "██║╚██╔╝██║██║   ██║██║██║╚██╗██║██║  ██║██║   ██║ ",
+                "██║ ╚═╝ ██║╚██████╔╝██║██║ ╚████║██████╔╝╚██████╔╝ ",
+                "╚═╝     ╚═╝ ╚═════╝ ╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝  "
+            };
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            foreach (var line in logo)
+            {
+                Console.SetCursorPosition((Console.WindowWidth - line.Length) / 2, Console.CursorTop);
+                Console.WriteLine(line);
+                Thread.Sleep(150);
+            }
+
+            Console.ResetColor();
+            
+            Console.WriteLine("\n\t\t\t\t\t아무 키나 눌러 생존을 시작하세요...");
+
+            Console.ReadKey(true);                      
+        }
+
+        public override void Unload() { }
+    }
+    #endregion
     #region 게임씬
     public class GameScene : Scene
     {
-        private CGameManager gameManager;
-        private CPlayer player;
+        private CGameManager _gameManager;
+        private CPlayer _player;
 
-        public GameScene(CGameManager game, CPlayer player)
+        public GameScene(CGameManager gameManager, CPlayer player)
         {
-            gameManager = game;
-            this.player = player;
+            _gameManager = gameManager;
+            _player = player;
         }
 
         public override void Load(SceneManager manager)
@@ -69,7 +113,7 @@ namespace Game.Scene
             while (true)
             {                     
                 // 맵 
-                gameManager.RenderMap();
+                _gameManager.RenderMap();
 
                 // 키 세팅 출력 
                 Console.SetCursorPosition(85, 0);
@@ -115,7 +159,7 @@ namespace Game.Scene
                 Console.WriteLine(" : 포탈");
 
                 // 캐릭터 상태 출력                
-                player.ShowStatus();
+                _player.ShowStatus();
 
                 // 행동 UI 
                 Console.SetCursorPosition(0, 0);              
@@ -127,15 +171,15 @@ namespace Game.Scene
                 {
                     // NPC 상호작용 키
                     case ConsoleKey.Spacebar:
-                        var currentMap = gameManager.GetCurrentMap();
-                        var npc = currentMap.GetNearByNPC(gameManager.PlayerX, gameManager.PlayerY);
+                        var currentMap = _gameManager.GetCurrentMap();
+                        var npc = currentMap.GetNearByNPC(_gameManager.PlayerX, _gameManager.PlayerY);
                         if (npc != null)
                         {
-                            npc.Interact(gameManager.Player);
+                            npc.Interact(_gameManager.Player);
                         }
-                        else if (gameManager.IsNearRiver(currentMap, gameManager.PlayerX, gameManager.PlayerY))
+                        else if (_gameManager.IsNearRiver(currentMap, _gameManager.PlayerX, _gameManager.PlayerY) && _gameManager.Player.CurrentMode == ActivityMode.낚시모드)
                         {
-                            gameManager.TryFishing(gameManager.Player);
+                            _gameManager.TryFishing(_gameManager.Player);
                         }
                         break;
 
@@ -143,13 +187,13 @@ namespace Game.Scene
                     case ConsoleKey.RightArrow:
                     case ConsoleKey.UpArrow:
                     case ConsoleKey.DownArrow:
-                        gameManager.playerAction(key.Key);
+                        _gameManager.playerAction(key.Key);
                         break;
                     case ConsoleKey.W:
                         manager.ChangeScene(SceneType.Inventory);
                         break;
                     case ConsoleKey.Q:
-                        gameManager.SelectMode(gameManager.Player);
+                        _gameManager.SelectMode(_gameManager.Player);
                         break;
                     case ConsoleKey.Backspace:
                         Console.WriteLine("게임 종료");
@@ -165,7 +209,7 @@ namespace Game.Scene
     public class InventoryScene : Scene
     {
         private CPlayer player;
-        public InventoryScene(CPlayer player)
+        public InventoryScene(CPlayer player, CGameManager gameManager)
         {
             this.player = player;
         }
@@ -214,7 +258,7 @@ namespace Game.Scene
             "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
             "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
             "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-            "BBBBBBBBBBBBBBBBBBBBBB|BBBBBBBBBBBBBBBBBBBBBBB",  // 낚싯줄
+            "BBBBBBBBBBBBBBBBBBBBBB|BBBBBBBBBBBBBBBBBBBBBBB",  
             "BBBBBBBBBBBBBBBBBBBBBB|BBBBBBBBBBBBBBBBBBBBBBB",
             "BBBBBBBBBBBBBBBBBBBBBB|BBBBBBBBBBBBBBBBBBBBBBB",
             "BBBBBBBBBBBBBBBBBBBBBB|BBBBBBBBBBBBBBBBBBBBBBB",

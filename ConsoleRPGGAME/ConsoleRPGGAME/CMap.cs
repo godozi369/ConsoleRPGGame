@@ -18,7 +18,6 @@ namespace Game.Map
         {
             Name = name;
         }
-
         public void Initialize(int size)
         {
             _tile = new TileType[size, size]; // 맵의 크기 size x size 만큼 2차원 배열 생성
@@ -104,8 +103,6 @@ namespace Game.Map
                     return npc;
             }
             return null;
-        }
-       
-
+        }       
     }
 }
