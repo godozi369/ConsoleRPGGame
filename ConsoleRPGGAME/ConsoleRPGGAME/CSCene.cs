@@ -161,7 +161,6 @@ namespace Game.Scene
         public override void Unload() { }
     }
     #endregion
-
     #region 인벤토리씬
     public class InventoryScene : Scene
     {
@@ -203,6 +202,7 @@ namespace Game.Scene
         public override void Unload() { }
     }
     #endregion
+    #region 낚시 씬
     public class FishingScene : Scene
     {
         public override void Load(SceneManager manager)
@@ -246,6 +246,8 @@ namespace Game.Scene
         }
         public override void Unload() { }
     }
+    #endregion
+    #region 채광 씬
     public class MiningScene : Scene
     {
         public override void Load(SceneManager manager)
@@ -301,6 +303,8 @@ namespace Game.Scene
         }
         public override void Unload() { }
     }
+    #endregion
+    #region 벌목 씬
     public class LoggingScene : Scene
     {
         public override void Load(SceneManager manager)
@@ -348,6 +352,8 @@ namespace Game.Scene
 
         public override void Unload() { }
     }
+    #endregion
+    #region 채집 씬
     public class CollectingScene : Scene
     {
         public override void Load(SceneManager manager)
@@ -397,4 +403,5 @@ namespace Game.Scene
 
         public override void Unload() { }
     }
+    #endregion
 }

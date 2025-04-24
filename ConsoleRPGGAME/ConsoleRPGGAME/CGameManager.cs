@@ -67,9 +67,9 @@ namespace Game.GameManager
 
 
         public void playerAction(ConsoleKey key)
-        {                        
+        {
             CMap currentMap = _stages[_currentStage];
-                        
+
             int nextX = _playerX, nextY = _playerY;
 
 
@@ -112,26 +112,9 @@ namespace Game.GameManager
                 _playerX = 1;
                 _playerY = 1;
             }
-            
-            // 몬스터 랜덤 생성 
-            Random rand = new Random();
-            if (rand.Next(0, 100) < 0)
-            {
-                CMonster monster;
-                if (_currentStage == 0)
-                {
-                    monster = MonsterFactory.CreateMonkey();
-                }
-                else if (_currentStage == 1)
-                {
-                    monster = MonsterFactory.CreateWolf();
-                }
-                else return;
+        }    
+ 
 
-                CBattle battle = new CBattle();
-                battle.StartBattle(_player, monster); 
-            }
-        }
 
         // 강가 상호작용
         public bool IsNearRiver(CMap map, int x, int y)
